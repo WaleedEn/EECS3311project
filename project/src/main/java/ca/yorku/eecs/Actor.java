@@ -10,11 +10,6 @@ public class Actor {
 	private String name;
 	private List<String> movies; 
 
-
-
-
-
-
 	/**
 	 * 
 	 */
@@ -55,7 +50,7 @@ public class Actor {
 		
 	}
 	
-	public void removeMovie() {movies.remove(movieId);}
+	//public void removeMovie() {movies.remove(movieId);}
 	
 	public String toString() {
 		return actorId + " "+ " "+ name+ " "+ movies;
