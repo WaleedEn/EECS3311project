@@ -1,14 +1,16 @@
 package ca.yorku.eecs;
 import java.util.ArrayList; 
 import java.util.List;
+
 /**
- * Class displays an actor with id, name, and a list of movies they havce acted in. 
+ * Class displays an actor with id, name, and a list of movies they have acted in. 
  */
 public class Actor {
 
 	private String actorId;
 	private String name;
-	private List<String> movies; 
+	private List<Movie> movies; 
+	private List<String> movieNames; 
 
 	/**
 	 * 
@@ -18,7 +20,7 @@ public class Actor {
 		this.actorId = actorId;
 		this.name = name;
 		this.movies = new ArrayList<>();
-	}
+		this.movieNames = new ArrayList<>();	}
 
 
 	public String getActorId(){return actorId;}
@@ -33,29 +35,64 @@ public class Actor {
 	public String getName(){
 
 		return name; 
-		}
-	
-	
+	}
+
+
 	public String setname(String name){
 
 		return this.name = name; 
-		}
-	
-	
-	public List<String> getMovies(){
+	}
+
+
+	public List<Movie> getMovies(){
 		return movies; 
 	}
-	
-	public void addMovie() {
-		
+
+	public List<String> getMoviesNames(){
+		return movieNames; 
 	}
+<<<<<<< HEAD:project/src/main/java/ca/yorku/eecs/model/Actor.java
 	
 	//public void removeMovie() {movies.remove(movieId);}
 	
-	public String toString() {
-		return actorId + " "+ " "+ name+ " "+ movies;
+=======
+
+
+
+
+	public void addMovie(Movie movie) {
+
+		if(movie!=null && !movies.contains(movie))
+
+		{
+
+			movies.add(movie);
+			movieNames.add(movie.getName());
+
+		}
 	}
-	
+
+	public void remove(Movie movie) {
+
+		if(movie!=null )
+
+		{
+
+			movies.remove(movie);
+			movieNames.remove(movie.getName());
+
+		}
+	}
+
+
+
+	@Override
+>>>>>>> main:project/src/main/java/ca/yorku/eecs/Actor.java
+	public String toString() {
+		return "Actor [actorId=" + actorId + ", name=" + name + ", movies=" + movies + ", movieNames=" + movieNames
+				+ "]";
+	}
+
 }
 
 
