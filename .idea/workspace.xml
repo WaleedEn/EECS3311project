@@ -4,17 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e8365453-8812-41d3-983d-0bde4b5f86ec" name="Changes" comment="Completed Movie.java">
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/Actor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/ActorController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/ActorDAL.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/ActorDALImp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/App.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/Movie.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/MovieController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/MovieDAL.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/MovieDALImp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/Utils.java" beforeDir="false" />
+    <list default="true" id="e8365453-8812-41d3-983d-0bde4b5f86ec" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/app/App.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
