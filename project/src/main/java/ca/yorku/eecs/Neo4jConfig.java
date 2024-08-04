@@ -20,6 +20,10 @@ public class Neo4jConfig implements AutoCloseable{
         driver = GraphDatabase.driver(uriDb, AuthTokens.basic(USERNAME, PASSWORD), config);
     }
 
+    public Driver getDriver() {
+        return driver;
+    }
+
     @Override
     public void close() throws Exception {
         driver.close();
