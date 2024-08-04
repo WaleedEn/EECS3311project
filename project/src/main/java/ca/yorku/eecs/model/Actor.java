@@ -12,11 +12,6 @@ public class Actor {
 	private List<Movie> movies; 
 	private List<String> movieNames; 
 
-
-
-
-
-
 	/**
 	 * 
 	 */
@@ -56,6 +51,11 @@ public class Actor {
 	public List<String> getMoviesNames(){
 		return movieNames; 
 	}
+<<<<<<< HEAD:project/src/main/java/ca/yorku/eecs/model/Actor.java
+	
+	//public void removeMovie() {movies.remove(movieId);}
+	
+=======
 
 
 
@@ -87,6 +87,7 @@ public class Actor {
 
 
 	@Override
+>>>>>>> main:project/src/main/java/ca/yorku/eecs/Actor.java
 	public String toString() {
 		return "Actor [actorId=" + actorId + ", name=" + name + ", movies=" + movies + ", movieNames=" + movieNames
 				+ "]";

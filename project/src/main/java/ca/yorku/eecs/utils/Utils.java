@@ -1,4 +1,4 @@
-package ca.yorku.eecs;
+package ca.yorku.eecs.utils;
 
 import org.neo4j.driver.v1.Driver;
 
