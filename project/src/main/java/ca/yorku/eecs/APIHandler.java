@@ -1,16 +1,21 @@
 package ca.yorku.eecs;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 import ca.yorku.eecs.controller.ActorController;
 import ca.yorku.eecs.controller.MovieController;
+import ca.yorku.eecs.model.Actor;
 import ca.yorku.eecs.service.ActorService;
 import ca.yorku.eecs.service.MovieServices;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.json.JSONObject;
 import org.neo4j.driver.v1.Driver;
 
 public class APIHandler implements HttpHandler {
@@ -22,8 +27,8 @@ public class APIHandler implements HttpHandler {
 	public APIHandler(Neo4jConfig neo4jConfig){
 		this.neo4jConfig = neo4jConfig;
 		Driver driver = neo4jConfig.getDriver();
-		this.actorController = new ActorController(neo4jConfig.getDriver());
-		this.movieController = new MovieController(neo4jConfig.getDriver());
+		this.actorController = new ActorController(driver);
+		this.movieController = new MovieController(driver);
 	}
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
@@ -51,8 +56,8 @@ public class APIHandler implements HttpHandler {
 				handleComputeBaconNumber(exchange);
 			} else if (path.startsWith("/api/v1/computeBaconPath") && method.equals("GET")) {
 				handleComputerBaconPath(exchange);
-			} else if (path.startsWith("api/v1/updateMovieRating") && method.equals("PUT")) {
-				handleUpdateMovieRating(exchange);
+			} else if (path.startsWith("api/v1/AddMovieRating") && method.equals("PUT")) {
+				handleAddMovieRating(exchange);
 			} else if (path.startsWith("/api/v1/getAverageRating") && method.equals("GET")) {
 				handleGetAverageRating(exchange);
 			} else if (path.startsWith("/api/v1/addMovieBoxRevenue") && method.equals("PUT")) {
@@ -68,6 +73,42 @@ public class APIHandler implements HttpHandler {
 		} finally {
 			os.close();
 		}
+	}
+
+	private void handleAddActor(HttpExchange exchange) throws IOException {
+	}
+
+	private void handleAddMovie(HttpExchange exchange) {
+	}
+
+	private void handleAddRelationship(HttpExchange exchange) {
+	}
+
+	private void handleGetActor(HttpExchange exchange) {
+	}
+
+	private void handleGetMovie(HttpExchange exchange) {
+	}
+
+	private void handleHasRelationship(HttpExchange exchange) {
+	}
+
+	private void handleComputeBaconNumber(HttpExchange exchange) {
+	}
+
+	private void handleComputerBaconPath(HttpExchange exchange) {
+	}
+
+	private void handleAddMovieRating(HttpExchange exchange) {
+	}
+
+	private void handleGetAverageRating(HttpExchange exchange) {
+	}
+
+	private void handleAddMovieBoxRevenue(HttpExchange exchange) {
+	}
+
+	private void handleGetActorMoviesByBoxRevenue(HttpExchange exchange) {
 	}
 
 

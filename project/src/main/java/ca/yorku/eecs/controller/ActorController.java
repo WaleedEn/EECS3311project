@@ -16,6 +16,7 @@ Example role: When you come to the library with a request, like "I want to add a
 
 import ca.yorku.eecs.Neo4jConfig;
 import ca.yorku.eecs.dao.ActorDAO;
+import ca.yorku.eecs.model.Actor;
 import ca.yorku.eecs.service.ActorService;
 import ca.yorku.eecs.service.ActorServicesImp;
 
@@ -24,4 +25,6 @@ public class ActorController {
     public ActorController(Neo4jConfig neo4jConfig){}
 
 
+    public void addActor(Actor actor) {
+    }
 }
