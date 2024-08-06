@@ -1,4 +1,4 @@
-package ca.yorku.eecs;
+package ca.yorku.eecs.controller;
 
 public class MovieController {
     

@@ -1,5 +1,5 @@
-package ca.yorku.eecs;
+package ca.yorku.eecs.dao;
 
-public class ActorDAL {
+public class ActorDAO {
     
 }

@@ -14,7 +14,8 @@ public class App
         
         //creating a single context for all API requests as mentioned in assignment 
         
-        server.createContext("/", new APIHandler());
+        server.createContext("/api/v1", new APIHandler());
+        server.setExecutor(null);
         
         server.start();
         System.out.printf("Server started on port %d...\n", PORT);
