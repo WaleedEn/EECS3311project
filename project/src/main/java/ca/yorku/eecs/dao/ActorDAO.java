@@ -1,5 +1,7 @@
 package ca.yorku.eecs.dao;
 
+import ca.yorku.eecs.model.Actor;
+
 import java.util.List;
 
 /*
@@ -14,10 +16,13 @@ Example Role: Keeps a record of all the actors in the library. It has special me
 in the library or to add a new one.
  */
 public interface ActorDAO {
-    boolean addActor(String name, String actorId);
-    double getAverageMovieRating(String actorId);
-    int computeBaconNumber(String actorId);
-    List<String> computeBaconpath(String actorId);
+    boolean addActor(Actor actor);
+    Actor getActor(String actorId);
+    boolean addRelationship(String actorId, String movieId);
     boolean HasRelationship(String actorId, String movieId);
+    int computeBaconNumber(String actorId);
+    String computeBaconPath(String actorId);
+
+
 
 }

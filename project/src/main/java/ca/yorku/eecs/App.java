@@ -16,7 +16,7 @@ public class App
         
         //creating a single context for all API requests as mentioned in assignment 
         
-        server.createContext("/ap1/v1", new APIHandler(neo4jConfig));
+        server.createContext("/api/v1", new APIHandler(neo4jConfig));
         
         server.start();
         System.out.printf("Server started on port %d...\n", PORT);
