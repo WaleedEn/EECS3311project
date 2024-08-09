@@ -320,23 +320,25 @@ public class APIHandler implements HttpHandler {
 	}
 
 	private void handleaddMovieRating(HttpExchange request) throws IOException, JSONException{
+
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getRequestBody(), StandardCharsets.UTF_8));
     	StringBuilder requestBody = new StringBuilder();
     	String line;
+
     	reader.lines().forEach(requestBody::append);
 
     	reader.close();
 
-    // request body turned into JSON object: 
+    	// request body turned into JSON object: 
     	JSONObject json = new JSONObject(requestBody.toString());
     	String movieId = json.getString("movieId");
     	double rating = json.getDouble("rating");
 
-    // MovieController being called
+    	// MovieController being called
    		boolean success = movieController.addMovieRating(movieId, rating);
 
-    // send response to client
-	this.response(request, response ? 200 : 400, response ? "Movie added Successfully" : "Failed to add Movie");
+    	// send response to client
+		this.response(request, response ? 200 : 400, response ? "Movie added Successfully" : "Failed to add Movie");
 	
 	}
 
