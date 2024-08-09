@@ -16,6 +16,7 @@ Example role: When you come to the library with a request, like "I want to add a
 
 import ca.yorku.eecs.Neo4jConfig;
 import ca.yorku.eecs.model.Actor;
+import ca.yorku.eecs.model.Movie;
 import ca.yorku.eecs.service.ActorService;
 import ca.yorku.eecs.service.ActorServiceImp;
 import org.neo4j.driver.v1.Driver;
@@ -30,9 +31,10 @@ public class ActorController {
         this.actorService = new ActorServiceImp(driver);
     }
 
-    public boolean addActor(Actor actor){
-        return actorService.addActor(actor);
-    }
+	public boolean addActor(String actorId, String name) {
+		return actorService.addActor(actorId, name);
+		
+	}
 
     public Actor getActor(String actorId){
         return actorService.getActor(actorId);
@@ -63,8 +65,9 @@ public class ActorController {
         return null;
     }
 
-    public String getActorMoviesByBoxRevenue(String actorId){
-        return null;
+    public List<Movie> getActorMoviesByBoxRevenue(String actorId){
+    	// TODO Auto-generated method stub
+    	return actorService.getActorMoviesByBoxRevenue(actorId);
     }
 
 
