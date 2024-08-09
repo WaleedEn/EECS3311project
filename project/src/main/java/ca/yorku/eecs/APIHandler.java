@@ -244,9 +244,8 @@ public class APIHandler implements HttpHandler {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getRequestBody(), StandardCharsets.UTF_8));
     	StringBuilder requestBody = new StringBuilder();
     	String line;
-    	while ((line = reader.readLine()) != null) {
-        	requestBody.append(line);
-    	}
+    	reader.lines().forEach(requestBody::append);
+
     	reader.close();
 
     // request body turned into JSON object: 
@@ -258,11 +257,8 @@ public class APIHandler implements HttpHandler {
    		boolean success = movieController.addMovieRating(movieId, rating);
 
     // send response to client
-    	if (success) {
-        	this.response(request, 200, "Movie rating added successfully");
-    	} else {
-        	this.response(request, 400, "Failed to add movie rating");
-   		}	
+	this.response(request, response ? 200 : 400, response ? "Movie added Successfully" : "Failed to add Movie");
+	
 	}
 
 	private void handleGetAverageRating(HttpExchange request) throws IOException{
