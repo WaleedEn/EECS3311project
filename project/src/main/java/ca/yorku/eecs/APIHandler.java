@@ -321,7 +321,7 @@ public class APIHandler implements HttpHandler {
 		}
 	}
 
-	private void handleaddMovieRating(HttpExchange request) throws IOException{
+	private void handleaddMovieRating(HttpExchange request) throws IOException, JSONException{
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getRequestBody(), StandardCharsets.UTF_8));
     StringBuilder requestBody = new StringBuilder();
     String line;
