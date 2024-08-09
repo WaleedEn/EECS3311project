@@ -1,57 +1,44 @@
 package ca.yorku.eecs.controller;
 
-import com.sun.net.httpserver.HttpExchange;
+import java.util.List;
+
+import org.neo4j.driver.v1.Driver;
+
+import ca.yorku.eecs.dao.ActorDAOImp;
 import ca.yorku.eecs.model.Actor;
-import ca.yorku.eecs.services.ActorServices;
-import ca.yorku.eecs.utils.Utils;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-
-import org.json.JSONException;
+import ca.yorku.eecs.model.Movie;
+import ca.yorku.eecs.service.ActorServices;
 
 public class ActorController {
-    private static final ActorServices actorService = new ActorServices();
+	
+	private ActorServices actor_Servicing;
+	
+	
+	public ActorController(Driver driver) {
+		this.actor_Servicing = new ActorServices(driver);
+		
+		
+	}
+	
+	public boolean addActor(String actorId, String name) {
+		return actor_Servicing.addActor(actorId, name);
+		
+	}
 
-    public static void addActor(HttpExchange exchange) throws IOException, JSONException {
-        InputStream is = exchange.getRequestBody();
-        String requestBody = new String(readAllBytes(is), StandardCharsets.UTF_8);
-        Actor actor = Utils.parseActorFromJson(requestBody);
-        String response;
-        int statusCode;
+	public Actor getActor(String actorId) {
+		// TODO Auto-generated method stub
+		return actor_Servicing.getActor(actorId);
+	}
 
-        if (actor == null) {
-            response = "Invalid actor data";
-            statusCode = 400;
-        } else {
-            try {
-                actorService.addActor(actor);  // Pass the Actor object directly
-                response = "Actor added successfully";
-                statusCode = 200;
-            } catch (Exception e) {
-                response = "Error adding actor: " + e.getMessage();
-                statusCode = 500;
-            }
-        }
+	
+	public List<Movie> getActorMoviesByBoxRevenue(String actorId) {
+		// TODO Auto-generated method stub
+		return actor_Servicing.getActorMoviesByBoxRevenue(actorId);
+		}
+	
 
-        exchange.sendResponseHeaders(statusCode, response.length());
-        OutputStream os = exchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
-    }
-
-    private static byte[] readAllBytes(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        int nRead;
-        byte[] data = new byte[1024];
-        while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-            buffer.write(data, 0, nRead);
-        }
-        return buffer.toByteArray();
-    }
-
-    // Other methods for updateActor, getActor, etc.
+	
+	
+	
+    
 }

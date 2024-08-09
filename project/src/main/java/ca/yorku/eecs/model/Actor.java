@@ -23,6 +23,15 @@ public class Actor {
 		this.movieNames = new ArrayList<>();	}
 
 
+	public Actor(String actorId, String name, List<String> moviesNames) {
+		// TODO Auto-generated constructor stub
+		this.actorId = actorId;
+		this.name = name;
+		this.movieNames = moviesNames;
+		
+	}
+
+
 	public String getActorId(){return actorId;}
 
 
@@ -61,7 +70,19 @@ public class Actor {
 		{
 
 			movies.add(movie);
-			movieNames.add(movie.getName());
+			
+
+		}
+	}
+	
+	public void addMovie(String movieName) {
+
+		if(movieNames!=null && !movieNames.contains(movieName))
+
+		{
+
+			movieNames.add(movieName);
+			
 
 		}
 	}
@@ -73,11 +94,21 @@ public class Actor {
 		{
 
 			movies.remove(movie);
-			movieNames.remove(movie.getName());
-
+			
 		}
 	}
 
+	
+	public void remove(String movieName) {
+
+		if(movieName!=null )
+
+		{
+
+			movieNames.remove(movieName);
+			
+		}
+	}
 
 
 	@Override
