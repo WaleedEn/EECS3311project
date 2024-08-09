@@ -102,12 +102,13 @@ public class APIHandler implements HttpHandler {
 	}
 
 	private void handleAddMovie(HttpExchange request) throws IOException, JSONException {
+		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getRequestBody(), StandardCharsets.UTF_8));
 		StringBuilder requestBody = new StringBuilder();
 		String line;
-		while ((line = reader.readLine()) != null) {
-			requestBody.append(line);
-		}
+
+		reader.lines().forEach(requestBody::append);
+
 		reader.close();
 
 		JSONObject json = new JSONObject(requestBody.toString());
@@ -118,11 +119,8 @@ public class APIHandler implements HttpHandler {
 
 		boolean response = movieController.addMovie(movie);
 
-		if (response) {
-			this.response(request, 200, "Movie added Succesfully");
-		} else {
-			this.response(request, 400, "Failed to add Movie");
-		}
+		this.response(request, response ? 200 : 400, response ? "Movie added Successfully" : "Failed to add Movie");
+
 	}
 
 	private void handleAddRelationship(HttpExchange request) throws IOException, JSONException {
@@ -242,28 +240,29 @@ public class APIHandler implements HttpHandler {
 	}
 
 	private void handleaddMovieRating(HttpExchange request) throws IOException{
+		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getRequestBody(), StandardCharsets.UTF_8));
-    StringBuilder requestBody = new StringBuilder();
-    String line;
-    while ((line = reader.readLine()) != null) {
-        requestBody.append(line);
-    }
-    reader.close();
+    	StringBuilder requestBody = new StringBuilder();
+    	String line;
+    	while ((line = reader.readLine()) != null) {
+        	requestBody.append(line);
+    	}
+    	reader.close();
 
-    // Convert the request body to a JSON object
-    JSONObject json = new JSONObject(requestBody.toString());
-    String movieId = json.getString("movieId");
-    double rating = json.getDouble("rating");
+    // request body turned into JSON object: 
+    	JSONObject json = new JSONObject(requestBody.toString());
+    	String movieId = json.getString("movieId");
+    	double rating = json.getDouble("rating");
 
-    // Call the MovieController to add the movie rating
-    boolean success = movieController.addMovieRating(movieId, rating);
+    // MovieController being called
+   		boolean success = movieController.addMovieRating(movieId, rating);
 
-    // Send the response back to the client
-    if (success) {
-        this.response(request, 200, "Movie rating added successfully");
-    } else {
-        this.response(request, 400, "Failed to add movie rating");
-    }
+    // send response to client
+    	if (success) {
+        	this.response(request, 200, "Movie rating added successfully");
+    	} else {
+        	this.response(request, 400, "Failed to add movie rating");
+   		}	
 	}
 
 	private void handleGetAverageRating(HttpExchange request) throws IOException{
