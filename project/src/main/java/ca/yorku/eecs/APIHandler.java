@@ -242,6 +242,28 @@ public class APIHandler implements HttpHandler {
 	}
 
 	private void handleaddMovieRating(HttpExchange request) throws IOException{
+		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getRequestBody(), StandardCharsets.UTF_8));
+    StringBuilder requestBody = new StringBuilder();
+    String line;
+    while ((line = reader.readLine()) != null) {
+        requestBody.append(line);
+    }
+    reader.close();
+
+    // Convert the request body to a JSON object
+    JSONObject json = new JSONObject(requestBody.toString());
+    String movieId = json.getString("movieId");
+    double rating = json.getDouble("rating");
+
+    // Call the MovieController to add the movie rating
+    boolean success = movieController.addMovieRating(movieId, rating);
+
+    // Send the response back to the client
+    if (success) {
+        this.response(request, 200, "Movie rating added successfully");
+    } else {
+        this.response(request, 400, "Failed to add movie rating");
+    }
 	}
 
 	private void handleGetAverageRating(HttpExchange request) throws IOException{
