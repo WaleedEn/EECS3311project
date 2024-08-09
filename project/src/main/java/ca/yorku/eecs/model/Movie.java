@@ -1,4 +1,4 @@
-package ca.yorku.eecs;
+package ca.yorku.eecs.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,38 +7,35 @@ public class Movie {
     private String movieId;
     private String name;
     private List<String> actors;
-    private int rating;
-    private int revenue;
+    private double rating;
+    private double revenue;
 
-
-    public Movie() {
-        actors = new ArrayList<>();
-    }
-
-    public Movie(String id, String name, int revenue, int rating) {
+    public Movie(String id, String name) {
         this.movieId = id;
         this.name = name;
-        this.revenue = revenue;
-        this.rating = rating;
+        this.actors = new ArrayList<>();
     }
 
+    public Movie(String id, String name, double rating, double revenue){
+        this.movieId = id;
+        this.name = name;
+        this.rating = rating;
+        this.revenue = revenue;
+    }
     public String getMovieId() {
         return movieId;
     }
-
 
     public String getName() {
         return name;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
-
-    public int getRevenue() {
+    public double getRevenue() {
         return revenue;
     }
-
     public List<String> getActors() {
         return actors;
     }
@@ -54,12 +51,9 @@ public class Movie {
     public void setActors(List<String> actors) {
         this.actors = actors;
     }
-
-
     public void setRating(int rating) {
         this.rating = rating;
     }
-
     public void setRevenue(int revenue) {
         this.revenue = revenue;
     }

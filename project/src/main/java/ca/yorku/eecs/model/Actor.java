@@ -1,99 +1,59 @@
-package ca.yorku.eecs;
-import java.util.ArrayList; 
+package ca.yorku.eecs.model;
+
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Class displays an actor with id, name, and a list of movies they have acted in. 
- */
 public class Actor {
 
-	private String actorId;
-	private String name;
-	private List<Movie> movies; 
-	private List<String> movieNames; 
+    private String actorId;
+    private String name;
+    private List<String> movies; //List of movie Ids
 
-	/**
-	 * 
-	 */
-	public Actor(String actorId, String name){
+    public Actor(String actorId, String name){
+        this.actorId = actorId;
+        this.name = name;
+        this.movies = new ArrayList<>();
+    }
 
-		this.actorId = actorId;
-		this.name = name;
-		this.movies = new ArrayList<>();
-		this.movieNames = new ArrayList<>();	}
+    public Actor(String id, String name, List<String> movies) {
+        this.actorId = id;
+        this.name = name;
+        this.movies = movies;
+    }
 
-
-	public String getActorId(){return actorId;}
-
-
-	public void setActorId(String actorId){
-
-		this.actorId = actorId;
-	}
+    public String getActorId(){return actorId;}
 
 
-	public String getName(){
-
-		return name; 
-	}
-
-
-	public String setname(String name){
-
-		return this.name = name; 
-	}
+    public void setActorId(String actorId){
+        this.actorId = actorId;
+    }
 
 
-	public List<Movie> getMovies(){
-		return movies; 
-	}
+    public String getName(){
+        return name;
+    }
 
-	public List<String> getMoviesNames(){
-		return movieNames; 
-	}
-<<<<<<< HEAD:project/src/main/java/ca/yorku/eecs/model/Actor.java
-	
-	//public void removeMovie() {movies.remove(movieId);}
-	
-=======
+    public void setName(String name){
+        this.name = name;
+    }
 
+    public List<String> getMovies(){
+        return movies;
+    }
 
+    public void addMovie(String movieId) {
+        if(movieId!=null && !movies.contains(movieId))
+        {
+            movies.add(movieId);
+        }
+    }
 
-
-	public void addMovie(Movie movie) {
-
-		if(movie!=null && !movies.contains(movie))
-
-		{
-
-			movies.add(movie);
-			movieNames.add(movie.getName());
-
-		}
-	}
-
-	public void remove(Movie movie) {
-
-		if(movie!=null )
-
-		{
-
-			movies.remove(movie);
-			movieNames.remove(movie.getName());
-
-		}
-	}
-
-
-
-	@Override
->>>>>>> main:project/src/main/java/ca/yorku/eecs/Actor.java
-	public String toString() {
-		return "Actor [actorId=" + actorId + ", name=" + name + ", movies=" + movies + ", movieNames=" + movieNames
-				+ "]";
-	}
-
+    @Override
+    public String toString() {
+        return "Actor{" +
+                "actorId='" + actorId + '\'' +
+                ", name='" + name + '\'' +
+                ", movies=" + movies +
+                '}';
+    }
 }
-
-
-

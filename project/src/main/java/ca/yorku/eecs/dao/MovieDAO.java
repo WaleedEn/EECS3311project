@@ -1,5 +1,12 @@
-package ca.yorku.eecs;
+package ca.yorku.eecs.dao;
 
-public class MovieDAL {
-    
+import ca.yorku.eecs.model.Movie;
+
+public interface MovieDAO {
+
+    boolean addMovie(Movie movie);
+    Movie getMovie(String movieId);
+    boolean addMovieRating(String movieId, double rating);
+    boolean addMovieBoxOffice(String movieId, double boxRevenue);
+
 }
