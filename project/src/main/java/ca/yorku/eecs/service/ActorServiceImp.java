@@ -17,6 +17,8 @@ import ca.yorku.eecs.dao.ActorDAOImp;
 import ca.yorku.eecs.model.Actor;
 import org.neo4j.driver.v1.Driver;
 
+import java.util.List;
+
 public class ActorServiceImp implements ActorService {
 
     private final ActorDAO actorDAO;
@@ -35,8 +37,8 @@ public class ActorServiceImp implements ActorService {
     }
 
     @Override
-    public String addRelationship(String actorId1, String actorId2, String relationshipType) {
-        return null;
+    public boolean addRelationship(String actorId, String movieId) {
+        return actorDAO.addRelationship(actorId, movieId);
     }
 
     @Override
@@ -57,8 +59,8 @@ public class ActorServiceImp implements ActorService {
     }
 
     @Override
-    public String computeBaconPath(String actorId) {
-        return null;
+    public List<String> computeBaconPath(String actorId, String kevinBaconId) {
+        return actorDAO.computeBaconPath(actorId, kevinBaconId);
     }
 
     @Override

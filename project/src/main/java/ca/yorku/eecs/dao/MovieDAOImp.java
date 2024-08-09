@@ -1,28 +1,44 @@
 package ca.yorku.eecs.dao;
 
 import ca.yorku.eecs.Neo4jConfig;
+import ca.yorku.eecs.model.Movie;
+import org.neo4j.driver.v1.Driver;
+import org.neo4j.driver.v1.Session;
+import org.neo4j.driver.v1.Values;
+
+import java.util.Collections;
 
 public class MovieDAOImp implements MovieDAO{
 
-    private final Neo4jConfig neo4jConfig = new Neo4jConfig();
+    private final Driver driver;
 
+    public MovieDAOImp(Driver driver){
+        this.driver = driver;
+    }
     @Override
-    public boolean addMovie(String name) {
-        return false;
+    public boolean addMovie(Movie movie) {
+        try (Session session = driver.session()) {
+            String query = "CREATE (m:Movie {id: $id, name: $name})";
+            session.run(query, Values.parameters("id", movie.getMovieId(), "name", movie.getName()));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public boolean addMovieRating(String movieId, int rating) {
-        return false;
-    }
-
-    @Override
-    public boolean addMovieBoxOffice(String movieId, String boxRevenue) {
-        return false;
-    }
-
-    @Override
-    public String getMoviesSortedByBoxRevenue(String actorId) {
+    public Movie getMovie(String movieId) {
         return null;
+    }
+
+    @Override
+    public boolean addMovieRating(String movieId, double rating) {
+        return false;
+    }
+
+    @Override
+    public boolean addMovieBoxOffice(String movieId, double boxRevenue) {
+        return false;
     }
 }

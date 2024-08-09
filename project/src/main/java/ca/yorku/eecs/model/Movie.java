@@ -10,14 +10,10 @@ public class Movie {
     private double rating;
     private double revenue;
 
-
-    public Movie() {
-        actors = new ArrayList<>();
-    }
-
     public Movie(String id, String name) {
         this.movieId = id;
         this.name = name;
+        this.actors = new ArrayList<>();
     }
 
     public Movie(String id, String name, double rating, double revenue){

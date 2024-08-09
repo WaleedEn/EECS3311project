@@ -4,6 +4,7 @@ import ca.yorku.eecs.Neo4jConfig;
 import ca.yorku.eecs.model.Actor;
 import org.neo4j.driver.v1.*;
 import org.neo4j.driver.v1.types.Node;
+import org.neo4j.driver.v1.types.Path;
 
 import static org.neo4j.driver.v1.Values.parameters;
 
@@ -66,7 +67,16 @@ public class ActorDAOImp implements ActorDAO {
 
     @Override
     public boolean addRelationship(String actorId, String movieId) {
-        return false;
+        try (Session session = driver.session()) {
+            String query = "MATCH (a:Actor {id: $actorId}), (m:Movie {id: $movieId}) " +
+                    "MERGE (a)-[:ACTED_IN]->(m)";
+            StatementResult result = session.run(query,
+                    Values.parameters("actorId", actorId, "movieId", movieId));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -94,20 +104,26 @@ public class ActorDAOImp implements ActorDAO {
     }
 
     @Override
-    public String computeBaconPath(String actorId) {
+    public List<String> computeBaconPath(String actorId, String kevinBaconId) {
+        List<String> listofPath = new ArrayList<>();
         try (Session session = driver.session()) {
-            String query = "MATCH (start:Actor {actorId: $actorId}), (bacon:Actor {actorId: 'nm0000102'}) " +
-                    "MATCH path = shortestPath((start)-[:ACTED_IN*]-(bacon)) " +
-                    "RETURN [node IN nodes(path) | node.actorId] AS baconPath";
+            String query = "MATCH p=shortestPath((a:Actor {id: $actorId})-[:ACTED_IN*..$int]-(b:Actor {id: $kevinBaconId})) " +
+                    "RETURN p";
+            StatementResult result = session.run(query, Values.parameters("actorId", actorId, "int", Integer.MAX_VALUE, "kevinBaconId", kevinBaconId));
 
-            StatementResult result = session.run(query, parameters("actorId", actorId));
             if (result.hasNext()) {
-                return "Bacon Path: " + result.single().get("baconPath").asList().toString();
+                Path path = result.next().get("p").asPath();
+                for (Node node : path.nodes()) {
+                    listofPath.add(node.get("id").asString());
+                }
             }
-            return "No path to Kevin Bacon";
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error occurred";
         }
+        return listofPath;
+    }
+
+    public List<String> getActorMoviesByBoxRevenue(String actorId){
+        return null;
     }
 }

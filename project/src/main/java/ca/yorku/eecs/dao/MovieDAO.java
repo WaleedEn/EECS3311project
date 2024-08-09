@@ -1,10 +1,12 @@
 package ca.yorku.eecs.dao;
 
+import ca.yorku.eecs.model.Movie;
+
 public interface MovieDAO {
 
-    boolean addMovie(String name);
-    boolean addMovieRating(String movieId, int rating);
-    boolean addMovieBoxOffice(String movieId, String boxRevenue);
-    String getMoviesSortedByBoxRevenue(String actorId);
+    boolean addMovie(Movie movie);
+    Movie getMovie(String movieId);
+    boolean addMovieRating(String movieId, double rating);
+    boolean addMovieBoxOffice(String movieId, double boxRevenue);
 
 }

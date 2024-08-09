@@ -21,7 +21,7 @@ public interface ActorDAO {
     boolean addRelationship(String actorId, String movieId);
     boolean HasRelationship(String actorId, String movieId);
     int computeBaconNumber(String actorId);
-    String computeBaconPath(String actorId);
+    List<String> computeBaconPath(String actorId, String kevinBaconId);
 
 
 

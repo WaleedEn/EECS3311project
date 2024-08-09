@@ -20,6 +20,8 @@ import ca.yorku.eecs.service.ActorService;
 import ca.yorku.eecs.service.ActorServiceImp;
 import org.neo4j.driver.v1.Driver;
 
+import java.util.List;
+
 public class ActorController {
 
     private final ActorService actorService;
@@ -36,6 +38,14 @@ public class ActorController {
         return actorService.getActor(actorId);
     }
 
+    public boolean addRelationship(String actorId, String movieId){
+        return actorService.addRelationship(actorId, movieId);
+    }
+
+    public boolean hasRelationship(String actorId, String movieId){
+        return false;
+    }
+
     public String computeBaconNumber(String actorId){
         try {
             return actorService.computeBaconNumber(actorId);
@@ -44,6 +54,22 @@ public class ActorController {
             return "Internal server error occured";
         }
     }
+
+    public List<String> computeBaconPath(String actorId, String kevinBaconId){
+        return actorService.computeBaconPath(actorId, kevinBaconId);
+    }
+
+    public String getAverageRating(String actorId){
+        return null;
+    }
+
+    public String getActorMoviesByBoxRevenue(String actorId){
+        return null;
+    }
+
+
+
+
 
 
 }

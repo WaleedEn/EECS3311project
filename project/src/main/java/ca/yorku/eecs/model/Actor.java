@@ -7,10 +7,9 @@ public class Actor {
 
     private String actorId;
     private String name;
-    private List<String> movies;
+    private List<String> movies; //List of movie Ids
 
     public Actor(String actorId, String name){
-
         this.actorId = actorId;
         this.name = name;
         this.movies = new ArrayList<>();
@@ -35,7 +34,6 @@ public class Actor {
     }
 
     public void setName(String name){
-
         this.name = name;
     }
 
