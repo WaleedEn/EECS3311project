@@ -15,6 +15,8 @@ and figures out what needs to be done with the actors.
 import ca.yorku.eecs.dao.ActorDAO;
 import ca.yorku.eecs.dao.ActorDAOImp;
 import ca.yorku.eecs.model.Actor;
+import ca.yorku.eecs.model.Movie;
+
 import org.neo4j.driver.v1.Driver;
 
 import java.util.List;
@@ -27,9 +29,10 @@ public class ActorServiceImp implements ActorService {
         this.actorDAO = new ActorDAOImp(driver);
     }
     @Override
-    public boolean addActor(Actor actor) {
-        return actorDAO.addActor(actor);
-    }
+    public boolean addActor(String actorId , String name) {
+		// TODO Auto-generated method stub
+		return actorDAO.addActor(actorId,name);
+	}
 
     @Override
     public Actor getActor(String actorId) {
@@ -67,5 +70,11 @@ public class ActorServiceImp implements ActorService {
     public double getAverageRating(String actorId) {
         return 0;
     }
+	@Override
+	public List<Movie> getActorMoviesByBoxRevenue(String actorId) {
+		return actorDAO.getActorMoviesByBoxRevenue(actorId);
+		// TODO Auto-generated method stub
+		
+	}
 
 }

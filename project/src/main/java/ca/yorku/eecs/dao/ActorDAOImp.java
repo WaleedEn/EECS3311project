@@ -2,6 +2,8 @@ package ca.yorku.eecs.dao;
 
 import ca.yorku.eecs.Neo4jConfig;
 import ca.yorku.eecs.model.Actor;
+import ca.yorku.eecs.model.Movie;
+
 import org.neo4j.driver.v1.*;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Path;
@@ -32,38 +34,87 @@ public class ActorDAOImp implements ActorDAO {
     }
 
     @Override
-    public boolean addActor(Actor actor) {
-        try (Session session = driver.session()) {
-            String query = "CREATE (a:Actor {id: $id, name: $name})";
-            session.run(query, Values.parameters("id", actor.getActorId(), "name", actor.getName()));
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+    public boolean addActor(String actorId, String name) {
+
+		String neo_LINE = "MERGE (a:Actor {actorId: $actorId, name: $name}) RETURN a";
+
+
+		//----------------------------------------------------------
+
+		try(Session session = driver.session()){
+
+
+			Transaction tx = session.beginTransaction();
+
+			StatementResult neo_RESULT = tx.run(neo_LINE, Values.parameters("actorId",actorId, "name", name)); 
+
+
+			//----------------------------------------------------------
+
+			boolean actoradded_CHEck = neo_RESULT.hasNext();
+
+			tx.success();
+
+			return actoradded_CHEck;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return false; 
+		}
+
+
+
+
+
+
+
+
+
+
+		//----------------------------------------------------------
+
+	}
 
     @Override
     public Actor getActor(String actorId) {
-        try (Session session = driver.session()) {
-            String query = "MATCH (a:Actor {id: $id})-[:ACTED_IN]->(m:Movie) " +
-                    "RETURN a.id AS id, a.name AS name, collect(m.id) AS movies";
-            StatementResult result = session.run(query, Collections.singletonMap("id", actorId));
 
-            // Check if the result contains any records
-            if (result.hasNext()) {
-                String id = result.next().get("id").asString();
-                String name = result.next().get("name").asString();
-                List<String> movieIds = result.next().get("movies").asList(Value::asString);
+		Actor actor_OBJ = null;
 
-                if(movieIds==null) movieIds=new ArrayList<>();
-                return new Actor(id, name, movieIds);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+		//----------------------------------------------------------
+
+		try(Session session = driver.session()){
+			String neo_LINE = "MATCH (a:Actor {actorId: $actorId}) RETURN a";
+			StatementResult neo_RESULT = session.run(neo_LINE, Values.parameters("actorId",actorId)); 
+
+
+			//----------------------------------------------------------
+
+			if(neo_RESULT.hasNext()) {
+				Node ndd = neo_RESULT.single().get("a").asNode(); 
+
+				actor_OBJ = new Actor(ndd.get("actorId").asString(), ndd.get("name").asString());
+				//----------------------------------------------------------
+
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+
+
+
+
+
+
+
+
+
+
+		//----------------------------------------------------------
+		return actor_OBJ;
+
+
+	}
 
     @Override
     public boolean addRelationship(String actorId, String movieId) {
@@ -123,7 +174,41 @@ public class ActorDAOImp implements ActorDAO {
         return listofPath;
     }
 
-    public List<String> getActorMoviesByBoxRevenue(String actorId){
-        return null;
-    }
+    public List<Movie> getActorMoviesByBoxRevenue(String actorId){
+		List<Movie> movie_list = new ArrayList<>();
+
+		String neo_line = "MATCH (a: Actor {actorId: $actorId})-[:ACTED_IN]->(m:Movie) " + "RETURN m.movieId AS movieId, m.name AS name, m.revenue AS revenue " + "ORDER BY m.revenue ASC" ;
+
+		try (Session session = driver.session()){
+
+			StatementResult neo_RESULT = session.run(neo_line, Values.parameters("actorId",actorId)); 
+
+			
+			while (neo_RESULT.hasNext()){
+				Record recorder = neo_RESULT.next(); 
+				String mvd = recorder.get("movieId").asString();
+				String nme = recorder.get("name").asString();
+				int rev = recorder.get("revenue").asInt();
+				
+				
+				Movie mv = new Movie(mvd, nme, rev, 0);
+				
+				
+				movie_list.add(mv);
+				
+
+			}
+
+			
+
+
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			
+		}
+
+
+		return movie_list; 
+	}
 }
