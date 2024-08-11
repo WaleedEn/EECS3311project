@@ -338,8 +338,11 @@ public class APIHandler implements HttpHandler {
    		boolean success = movieController.addMovieRating(movieId, rating);
 
     	// send response to client
-		this.response(request, response ? 200 : 400, response ? "Movie added Successfully" : "Failed to add Movie");
-	
+		if (success) {
+			this.response(request, 200, "Relationship added successfully");
+		} else {
+			this.response(request, 400, "Failed to add relationship");
+		}	
 	}
 
 	private void handleGetAverageRating(HttpExchange request) throws IOException{
