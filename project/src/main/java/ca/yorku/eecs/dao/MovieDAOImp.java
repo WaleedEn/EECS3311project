@@ -36,34 +36,17 @@ public class MovieDAOImp implements MovieDAO{
 @Override
 
 public boolean addMovieRating(String movieId, double rating) {
-
-    Session session = null;
-
-    try {
-        session = driver.session();
-        Transaction transaction = session.beginTransaction();
-
-        // match the movie and set its rating
+    
+    try (Session session = driver.session()) {
 
         String query = "MATCH (m:Movie {id: $id}) " + "SET m.rating = $rating";
-
-        transaction.run(query, Values.parameters("id", movieId, "rating", rating));
-        transaction.commit();
+        session.run(query, Values.parameters("id", movieId, "rating", rating));
         return true;
 
     } catch (Exception e) {
+        
         e.printStackTrace();
-        if (session != null) {
-            session.close();
-        }
-
         return false;
-
-
-    } finally {
-        if (session != null && session.isOpen()) {
-            session.close();
-        }
     }
 }
 
