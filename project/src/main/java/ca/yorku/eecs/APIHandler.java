@@ -338,7 +338,7 @@ public class APIHandler implements HttpHandler {
    		boolean success = movieController.addMovieRating(movieId, rating);
 
     	// send response to client
-		this.response(request, response ? 200 : 400, response ? "Movie added Successfully" : "Failed to add Movie");
+		this.response(request, success ? 200 : 400, success ? "Movie added Successfully" : "Failed to add Movie");
 	
 	}
 

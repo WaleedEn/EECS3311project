@@ -24,4 +24,8 @@ public class MovieController {
     public boolean addMovieBoxRevenue(String id, double boxRevenue) {
         return movieService.addMovieBoxRevenue(id, boxRevenue);
     }
+
+    public double getAverageRating(String movieId){
+        return 0;
+    }
 }

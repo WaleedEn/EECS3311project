@@ -4,6 +4,7 @@ import ca.yorku.eecs.Neo4jConfig;
 import ca.yorku.eecs.model.Movie;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.Session;
+import org.neo4j.driver.v1.Transaction;
 import org.neo4j.driver.v1.Values;
 
 import java.util.Collections;
