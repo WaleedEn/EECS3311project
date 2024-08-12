@@ -405,7 +405,6 @@ public class APIHandler implements HttpHandler {
 
 	private void handleAddMovieBoxRevenue(HttpExchange request) throws IOException{
 	}
-
 	private void handleGetActorMoviesByBoxRevenue(HttpExchange exchange) throws IOException {
 		
 		String actorId = null;
