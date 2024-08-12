@@ -10,7 +10,7 @@ public interface ActorService {
     Actor getActor(String actorId);
     boolean addRelationship(String actorId, String movieId);
     boolean hasRelationship(String actorId, String movieId);
-    String computeBaconNumber(String actorId);
+    int computeBaconNumber(String actorId);
     List<String> computeBaconPath(String actorId, String kevinBaconId);
     double getAverageRating(String actorId);
 	List<Movie> getActorMoviesByBoxRevenue(String actorId);

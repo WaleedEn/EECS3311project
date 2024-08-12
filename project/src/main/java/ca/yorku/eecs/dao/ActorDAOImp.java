@@ -168,17 +168,21 @@ public class ActorDAOImp implements ActorDAO {
 
     @Override
     public int computeBaconNumber(String actorId) {
+
+        final String KEVINBACON_ID = "nm0000102";
+
         try(Session session = driver.session()) {
-            String query = "MATCH (a:Actor {name: $actorName}), (b:Actor {name: 'Kevin Bacon'}) " +
-                    "CALL algo.shortestPath.stream(a, b, 'ACTED_IN') " +
-                    "YIELD nodeId, cost " +
-                    "RETURN count(nodeId) AS baconNumber";
-            StatementResult result = session.run(query, Collections.singletonMap("actorId", actorId));
+            String query = "MATCH path = shortestPath((a:Actor {id: $actorId})-[:ACTED_IN*]-(b:Actor {id: $kevinBaconId})) " +
+                    "RETURN length(path) AS baconNumber";
+
+            StatementResult result = session.run(query, Values.parameters("actorId", actorId, "kevinBaconId", KEVINBACON_ID));
 
             if (result.hasNext()) {
-                return result.single().get("baconNumber").asInt();
+                Record record = result.next();
+                return record.get("baconNumber").asInt()/2;
+            } else{
+                return -1;
             }
-            return -1;
         } catch (Exception e){
             e.printStackTrace();
             return -1;
@@ -187,22 +191,21 @@ public class ActorDAOImp implements ActorDAO {
 
     @Override
     public List<String> computeBaconPath(String actorId, String kevinBaconId) {
-        List<String> listofPath = new ArrayList<>();
+        final String KEVINBACON_ID = "nm0000102";
         try (Session session = driver.session()) {
-            String query = "MATCH p=shortestPath((a:Actor {id: $actorId})-[:ACTED_IN*..$int]-(b:Actor {id: $kevinBaconId})) " +
-                    "RETURN p";
-            StatementResult result = session.run(query, Values.parameters("actorId", actorId, "int", Integer.MAX_VALUE, "kevinBaconId", kevinBaconId));
+            String query = "MATCH p=shortestPath((a:Actor {actorId: $actorId})-[*]-(b:Actor {actorId: $kevinBaconId})) " +
+                    "UNWIND nodes(p) AS node " +
+                    "RETURN node";
+
+            StatementResult result = session.run(query, Values.parameters("actorId", actorId, "kevinBaconId", KEVINBACON_ID));
 
             if (result.hasNext()) {
-                Path path = result.next().get("p").asPath();
-                for (Node node : path.nodes()) {
-                    listofPath.add(node.get("id").asString());
-                }
+                Record record = result.next();
+                List<String> path = new ArrayList<>();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return listofPath;
+
+        return new ArrayList<>(); //UNFINISHED
     }
 
     public List<Movie> getActorMoviesByBoxRevenue(String actorId){

@@ -55,15 +55,8 @@ public class ActorServiceImp implements ActorService {
 
 
     @Override
-    public String computeBaconNumber(String actorId) {
-        try{
-            int baconNumber = actorDAO.computeBaconNumber(actorId);
-            if(baconNumber==-1) return "Actor not found";
-            return "Bacon number for Actor " + actorId + " is " + baconNumber;
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Internal server error occured";
-        }
+    public int computeBaconNumber(String actorId) {
+        return actorDAO.computeBaconNumber(actorId);
     }
 
     @Override

@@ -48,13 +48,8 @@ public class ActorController {
         return actorService.hasRelationship(actorId, movieId);
     }
 
-    public String computeBaconNumber(String actorId){
-        try {
-            return actorService.computeBaconNumber(actorId);
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Internal server error occured";
-        }
+    public int computeBaconNumber(String actorId){
+        return actorService.computeBaconNumber(actorId);
     }
 
     public List<String> computeBaconPath(String actorId, String kevinBaconId){

@@ -281,16 +281,25 @@ public class APIHandler implements HttpHandler {
 		String query = request.getRequestURI().getQuery();
 		String actorId = Utils.getQueryParameter(query, "actorId");
 
-		if(actorId.isEmpty()){
+		if(actorId==null || actorId.isEmpty()){
 			sendResponse(request, 400, "Missing actorId");
 		}
 
-		String response = actorController.computeBaconNumber(actorId);
+		try{
+			int baconNumber = actorController.computeBaconNumber(actorId);
 
-		if(response == null || response.contains("not found")){
-			this.sendResponse(request, 404, "Bacon number not found");
-		}else{
-			this.sendResponse(request, 200, response);
+			if(baconNumber<0){
+				sendResponse(request, 404, "No path to Kevin Bacon found");
+			}
+			else {
+				JSONObject jr = new JSONObject();
+				jr.put("baconNumber", baconNumber);
+				sendResponse(request, 200, jr.toString());
+			}
+
+		} catch (Exception e){
+			e.printStackTrace();
+			sendResponse(request, 500, "Internal Server error");
 		}
 
 	}
