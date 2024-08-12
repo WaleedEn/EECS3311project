@@ -144,7 +144,7 @@ public class APIHandler implements HttpHandler {
 	}
 
 	private void handleAddMovie(HttpExchange request) throws IOException, JSONException {
-		
+
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getRequestBody(), StandardCharsets.UTF_8));
 		StringBuilder requestBody = new StringBuilder();
 		String line;
@@ -256,25 +256,25 @@ public class APIHandler implements HttpHandler {
 	private void handleHasRelationship(HttpExchange request) throws IOException{
 
 		String query = request.getRequestURI().getQuery();
-    	String actorId = Utils.getQueryParameter(query, "actorId");
-    	String movieId = Utils.getQueryParameter(query, "movieId");
+		String actorId = Utils.getQueryParameter(query, "actorId");
+		String movieId = Utils.getQueryParameter(query, "movieId");
 
-    	if (actorId == null || actorId.isEmpty() || movieId == null || movieId.isEmpty()) {
+		if (actorId == null || actorId.isEmpty() || movieId == null || movieId.isEmpty()) {
 
-        	sendResponse(request, 400, "Missing actorId or movieId");
-        	return;
-    	}
+			sendResponse(request, 400, "Missing actorId or movieId");
+			return;
+		}
 
-    	boolean hasRelationship = actorController.hasRelationship(actorId, movieId);
+		boolean hasRelationship = actorController.hasRelationship(actorId, movieId);
 
-    	if (hasRelationship) {
+		if (hasRelationship) {
 
-        	sendResponse(request, 200, "Relationship exists between actor and movie");
-			
-    	} else {
+			sendResponse(request, 200, "Relationship exists between actor and movie");
 
-        	sendResponse(request, 404, "No relationship exists between actor and movie");
-    	}
+		} else {
+
+			sendResponse(request, 404, "No relationship exists between actor and movie");
+		}
 	}
 
 	private void handleComputeBaconNumber(HttpExchange request) throws IOException {
@@ -354,8 +354,8 @@ public class APIHandler implements HttpHandler {
 	private void handleAddMovieRating(HttpExchange request) throws IOException, JSONException{
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getRequestBody(), StandardCharsets.UTF_8));
-    	StringBuilder requestBody = new StringBuilder();
-    	String line;
+		StringBuilder requestBody = new StringBuilder();
+		String line;
 
 
 		while ((line = reader.readLine()) != null) {
@@ -364,10 +364,10 @@ public class APIHandler implements HttpHandler {
 
 		reader.close();
 
-    	// request body turned into JSON object: 
-    	JSONObject json = new JSONObject(requestBody.toString());
-    	String movieId = json.getString("movieId");
-    	double rating = json.getDouble("rating");
+		// request body turned into JSON object: 
+		JSONObject json = new JSONObject(requestBody.toString());
+		String movieId = json.getString("movieId");
+		double rating = json.getDouble("rating");
 
 		if (rating<1 || rating>10) {
 			sendResponse(request, 400, "Failed to add movie rating(must be between 1 and 10)");
@@ -380,12 +380,12 @@ public class APIHandler implements HttpHandler {
 			return;
 		}
 
-    	// MovieController being called
-   		boolean success = movieController.addMovieRating(movieId, rating);
+		// MovieController being called
+		boolean success = movieController.addMovieRating(movieId, rating);
 
-    	// send response to client
+		// send response to client
 		this.sendResponse(request, success ? 200 : 400, success ? "Successfully added movie rating of " + rating +"/10" : "Failed to add Movie rating");
-	
+
 	}
 
 	private void handleGetAverageRating(HttpExchange request) throws IOException{
@@ -433,13 +433,42 @@ public class APIHandler implements HttpHandler {
 		}
 	}
 
-	private void handleAddMovieBoxRevenue(HttpExchange request) throws IOException{
+	private void handleAddMovieBoxRevenue(HttpExchange request) throws IOException, JSONException{
+		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getRequestBody(), StandardCharsets.UTF_8));
+		StringBuilder requestBody = new StringBuilder();
+		String line;
+
+
+		while ((line = reader.readLine()) != null) {
+			requestBody.append(line);
+		}
+
+		reader.close();
+
+		// request body turned into JSON object: 
+		JSONObject json = new JSONObject(requestBody.toString());
+		String movieId = json.getString("movieId");
+		double revenue = json.getDouble("revenue");
+
+
+
+		Movie movie = movieController.getMovie(movieId);
+		if (movie == null) {
+			sendResponse(request, 404, "Movie not found");
+			return;
+		}
+
+		// MovieController being called
+		boolean success = movieController.addMovieBoxRevenue(movieId, revenue);
+
+		// send response to client
+		this.sendResponse(request, success ? 200 : 400, success ? "Successfully added movie box revenue "  : "Failed to add movie box revenue");
 	}
 	private void handleGetActorMoviesByBoxRevenue(HttpExchange exchange) throws IOException {
-		
+
 		String actorId = null;
 		String neo_query_line = exchange.getRequestURI().getQuery();
-		
+
 		if(neo_query_line!=null) {
 			String [] splitted = neo_query_line.split("&");
 			for(String smaller :splitted ) {
@@ -451,58 +480,58 @@ public class APIHandler implements HttpHandler {
 				}
 			}
 		}
-		
+
 		if(actorId == null) {
 			exchange.sendResponseHeaders(400, -1);
 			return; 
 		}
-		
-		
+
+
 		try {
 			List<Movie> mvs = actorController.getActorMoviesByBoxRevenue(actorId);
-			
+
 			if(mvs.isEmpty()==false) {
 				//coverting movie array to JSON array
 				JSONArray jsonMVS = new JSONArray();
-				
+
 				for (Movie m: mvs) {
-					
+
 					JSONObject jsonMV = new JSONObject();
 
 					jsonMV.put("actorId", m.getMovieId());
 					jsonMV.put("name", m.getName());
 					jsonMV.put("movies", m.getRevenue());
-					
+
 					jsonMVS.put(jsonMV);
 				}
-				
+
 				String response_container = jsonMVS.toString();
-				
+
 				exchange.sendResponseHeaders(200, response_container.length());
-				
-				
+
+
 				try(OutputStream OUT_stream = exchange.getResponseBody()){
 					OUT_stream.write(response_container.getBytes(StandardCharsets.UTF_8));
 				}
-				
-				
-				
-				
+
+
+
+
 			}
 			else {
 				exchange.sendResponseHeaders(404, -1);//whne no movies found 
 			}
-			
-			
+
+
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			exchange.sendResponseHeaders(500, -1);//Internal Server errror
 		}
-		
-		
-		
-		
+
+
+
+
 	}
 
 	public void sendResponse(HttpExchange request, int statusCode, String response) throws IOException {
@@ -510,6 +539,6 @@ public class APIHandler implements HttpHandler {
 		OutputStream os = request.getResponseBody();
 		os.write(response.getBytes());
 		os.close();
-		}
-
 	}
+
+}
