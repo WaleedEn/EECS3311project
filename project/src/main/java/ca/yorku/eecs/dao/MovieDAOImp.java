@@ -82,8 +82,18 @@ public boolean addMovieRating(String movieId, double rating) {
     }
 }
     @Override
-    public boolean addMovieBoxOffice(String movieId, double boxRevenue) {
-        return false;
+    public boolean addMovieBoxOffice(String movieId, double revenue) {
+        try (Session session = driver.session()) {
+
+            String query = "MATCH (m:Movie {id: $id}) " + "SET m.revenue = $revenue";
+            session.run(query, Values.parameters("id", movieId, "revenue", revenue));
+            return true;
+
+        } catch (Exception e) {
+            
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
