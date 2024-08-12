@@ -7,8 +7,18 @@
     <list default="true" id="e8365453-8812-41d3-983d-0bde4b5f86ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/APIHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/APIHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/controller/ActorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/controller/ActorController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/controller/MovieController.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/controller/MovieController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAOImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAOImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/MovieDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/MovieDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/MovieDAOImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/MovieDAOImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/model/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/model/Movie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/service/ActorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/service/ActorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/service/ActorServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/service/ActorServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/service/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/service/MovieService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/service/MovieServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/service/MovieServiceImp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,20 +38,23 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
   <component name="ProjectId" id="2k1SdAyiaLmg6NJn4wRlk2v2T2k" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="EECS3311project" />
@@ -78,5 +91,15 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="org.neo4j.driver.v1.exceptions.ClientException" package="org.neo4j.driver.v1.exceptions" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

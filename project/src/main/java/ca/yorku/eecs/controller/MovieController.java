@@ -28,4 +28,8 @@ public class MovieController {
     public double getAverageRating(String movieId){
         return 0;
     }
+
+    public boolean updateMovie(Movie movie){
+       return movieService.updateMovie(movie);
+    }
 }

@@ -14,6 +14,8 @@ and figures out what needs to be done with the actors.
 
 import ca.yorku.eecs.dao.ActorDAO;
 import ca.yorku.eecs.dao.ActorDAOImp;
+import ca.yorku.eecs.dao.MovieDAO;
+import ca.yorku.eecs.dao.MovieDAOImp;
 import ca.yorku.eecs.model.Actor;
 import ca.yorku.eecs.model.Movie;
 
@@ -24,9 +26,11 @@ import java.util.List;
 public class ActorServiceImp implements ActorService {
 
     private final ActorDAO actorDAO;
+    private final MovieDAO movieDAO;
 
     public ActorServiceImp(Driver driver){
         this.actorDAO = new ActorDAOImp(driver);
+        this.movieDAO = new MovieDAOImp(driver);
     }
     @Override
     public boolean addActor(String actorId , String name) {
@@ -76,5 +80,15 @@ public class ActorServiceImp implements ActorService {
 		// TODO Auto-generated method stub
 		
 	}
+
+    @Override
+    public boolean updateActor(Actor actor) {
+        return actorDAO.updateActor(actor);
+    }
+
+    @Override
+    public List<Movie> getMoviesForActor(String actorId) {
+        return movieDAO.getMoviesForActor(actorId);
+    }
 
 }

@@ -1,10 +1,9 @@
 package ca.yorku.eecs;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import com.sun.net.httpserver.HttpServer;
 
-public class App 
+public class App
 {
     static int PORT = 8080;
     public static void main(String[] args) throws IOException

@@ -20,7 +20,7 @@ public class MovieServiceImp implements MovieService{
 
     @Override
     public Movie getMovie(String movieId) {
-        return null;
+        return movieDAO.getMovie(movieId);
     }
 
     @Override
@@ -30,5 +30,10 @@ public class MovieServiceImp implements MovieService{
     @Override
     public boolean addMovieBoxRevenue(String id, double revenue) {
         return movieDAO.addMovieBoxOffice(id, revenue);
+    }
+
+    @Override
+    public boolean updateMovie(Movie movie) {
+        return movieDAO.updateMovie(movie);
     }
 }

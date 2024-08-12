@@ -36,43 +36,33 @@ public class ActorDAOImp implements ActorDAO {
     @Override
     public boolean addActor(String actorId, String name) {
 
-		String neo_LINE = "MERGE (a:Actor {actorId: $actorId, name: $name}) RETURN a";
+        String checkActorQuery = "MATCH (a:Actor {id: $id}) RETURN a";
 
-
-		//----------------------------------------------------------
+        String addActorQuery = "MERGE (a:Actor {id: $id}) " +
+                "SET a.name = $name, " +
+                "a.movies = COALESCE(a.movies, []) " +
+                "RETURN a";
 
 		try(Session session = driver.session()){
-
-
 			Transaction tx = session.beginTransaction();
 
-			StatementResult neo_RESULT = tx.run(neo_LINE, Values.parameters("actorId",actorId, "name", name)); 
+			StatementResult neo_RESULT = tx.run(checkActorQuery, Values.parameters("id",actorId, "name", name));
 
+            if(neo_RESULT.hasNext()){
+                tx.success();
+                return false;
+            }
 
-			//----------------------------------------------------------
-
-			boolean actoradded_CHEck = neo_RESULT.hasNext();
-
+            StatementResult addResult = tx.run(addActorQuery, Values.parameters("id", actorId, "name", name));
 			tx.success();
 
-			return actoradded_CHEck;
+
+			return addResult.hasNext();
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			return false; 
+			return false;
 		}
-
-
-
-
-
-
-
-
-
-
-		//----------------------------------------------------------
-
 	}
 
     @Override
@@ -83,52 +73,80 @@ public class ActorDAOImp implements ActorDAO {
 		//----------------------------------------------------------
 
 		try(Session session = driver.session()){
-			String neo_LINE = "MATCH (a:Actor {actorId: $actorId}) RETURN a";
-			StatementResult neo_RESULT = session.run(neo_LINE, Values.parameters("actorId",actorId)); 
-
-
-			//----------------------------------------------------------
+			String neo_LINE = "MATCH (a:Actor {id: $actorId}) RETURN a";
+			StatementResult neo_RESULT = session.run(neo_LINE, Values.parameters("actorId",actorId));
 
 			if(neo_RESULT.hasNext()) {
-				Node ndd = neo_RESULT.single().get("a").asNode(); 
+				Node ndd = neo_RESULT.single().get("a").asNode();
 
-				actor_OBJ = new Actor(ndd.get("actorId").asString(), ndd.get("name").asString());
-				//----------------------------------------------------------
+                List<String> movies = new ArrayList<>();
+                if(ndd.containsKey("movies")){
+                    movies = ndd.get("movies").asList(Value::asString);
+                }
+                String id = ndd.get("id").asString();
+                String name = ndd.get("name").asString();
+				actor_OBJ = new Actor(id, name);
 
+                for(String movieId : movies){
+                    actor_OBJ.addMovie(movieId);
+                }
+                //----------------------------------------------------------
 			}
-		}
-		catch(Exception e) {
+
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
-
-
-
-
-
-
-
-
-
-
 		//----------------------------------------------------------
 		return actor_OBJ;
-
-
 	}
 
     @Override
     public boolean addRelationship(String actorId, String movieId) {
         try (Session session = driver.session()) {
-            String query = "MATCH (a:Actor {id: $actorId}), (m:Movie {id: $movieId}) " +
-                    "MERGE (a)-[:ACTED_IN]->(m)";
-            StatementResult result = session.run(query,
-                    Values.parameters("actorId", actorId, "movieId", movieId));
-            return true;
+            // Start a transaction
+            try (Transaction tx = session.beginTransaction()) {
+                // Check if the relationship already exists
+                String checkQuery = "MATCH (a:Actor {id: $actorId})-[r:ACTED_IN]->(m:Movie {id: $movieId}) RETURN r";
+                StatementResult checkResult = tx.run(checkQuery, Values.parameters("actorId", actorId, "movieId", movieId));
+
+                if (checkResult.hasNext()) {
+                    // Relationship already exists
+                    System.out.println("Relationship already exists");
+                    tx.failure(); // Indicate the transaction should be rolled back
+                    return false; // Relationship already exists
+                }
+
+                // Create or update the relationship
+                String relationshipQuery = "MATCH (a:Actor {id: $actorId}), (m:Movie {id: $movieId}) " +
+                        "MERGE (a)-[:ACTED_IN]->(m)";
+                tx.run(relationshipQuery, Values.parameters("actorId", actorId, "movieId", movieId));
+
+                // Update the actor's movie list
+                String updateActorQuery = "MATCH (a:Actor {id: $actorId}) " +
+                        "SET a.movies = COALESCE(a.movies, []) " +
+                        "WITH a, a.movies + [$movieId] AS updatedMovies " +
+                        "SET a.movies = updatedMovies";
+                tx.run(updateActorQuery, Values.parameters("actorId", actorId, "movieId", movieId));
+
+                // Update the movie's actor list
+                String updateMovieQuery = "MATCH (m:Movie {id: $movieId}) " +
+                        "SET m.actors = COALESCE(m.actors, []) " +
+                        "WITH m, m.actors + [$actorId] AS updatedActors " +
+                        "SET m.actors = updatedActors";
+                tx.run(updateMovieQuery, Values.parameters("movieId", movieId, "actorId", actorId));
+
+                tx.success(); // Commit the transaction
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+
 
     @Override
     public boolean HasRelationship(String actorId, String movieId) {
@@ -211,4 +229,18 @@ public class ActorDAOImp implements ActorDAO {
 
 		return movie_list; 
 	}
+
+    @Override
+    public boolean updateActor(Actor actor){
+        try(Session session = driver.session()){
+            String query = "MATCH (a:Actor {id: $actorId}) SET a.movies = $movies";
+            List<String> movies = actor.getMovies();
+            session.run(query, Values.parameters("actorId", actor.getActorId(), "movies", movies));
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

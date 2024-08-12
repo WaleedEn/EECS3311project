@@ -15,4 +15,6 @@ public interface ActorService {
     double getAverageRating(String actorId);
 	List<Movie> getActorMoviesByBoxRevenue(String actorId);
 
+    boolean updateActor(Actor actor);
+    List<Movie> getMoviesForActor(String actorId);
 }

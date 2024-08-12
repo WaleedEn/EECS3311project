@@ -69,10 +69,11 @@ public class ActorController {
     	// TODO Auto-generated method stub
     	return actorService.getActorMoviesByBoxRevenue(actorId);
     }
+    public boolean updateActor(Actor actor) {
+        return actorService.updateActor(actor);
+    }
 
-
-
-
-
-
+    public List<Movie> getMoviesForActor(String actorId){
+        return actorService.getMoviesForActor(actorId);
+    }
 }

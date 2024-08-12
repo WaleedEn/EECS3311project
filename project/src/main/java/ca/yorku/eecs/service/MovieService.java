@@ -8,4 +8,6 @@ public interface MovieService {
     boolean addMovieRating(String id, double rating);
     boolean addMovieBoxRevenue(String id, double revenue);
 
+    boolean updateMovie(Movie movie);
+
 }

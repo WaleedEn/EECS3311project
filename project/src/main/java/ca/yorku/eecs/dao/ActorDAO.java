@@ -26,6 +26,6 @@ public interface ActorDAO {
 	
 	List<Movie> getActorMoviesByBoxRevenue(String actorId);
 
-
+    public boolean updateActor(Actor actor);
 
 }

@@ -16,6 +16,11 @@ public class Movie {
         this.actors = new ArrayList<>();
     }
 
+    public Movie(String id, String name, double rating){
+        this.movieId = id;
+        this.name = name;
+        this.rating = rating;
+    }
     public Movie(String id, String name, double rating, double revenue){
         this.movieId = id;
         this.name = name;
@@ -50,6 +55,12 @@ public class Movie {
 
     public void setActors(List<String> actors) {
         this.actors = actors;
+    }
+    public void addActor(String actorId) {
+        if(actorId!=null && !actors.contains(actorId))
+        {
+            this.actors.add(actorId);
+        }
     }
     public void setRating(int rating) {
         this.rating = rating;
