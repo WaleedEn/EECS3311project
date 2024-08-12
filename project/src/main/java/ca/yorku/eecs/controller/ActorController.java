@@ -45,7 +45,7 @@ public class ActorController {
     }
 
     public boolean hasRelationship(String actorId, String movieId){
-        return false;
+        return actorService.hasRelationship(actorId, movieId);
     }
 
     public String computeBaconNumber(String actorId){
