@@ -53,7 +53,6 @@ public class ActorServiceImp implements ActorService {
         return actorDAO.hasRelationship(actorId, movieId);
     }
 
-
     @Override
     public int computeBaconNumber(String actorId) {
         return actorDAO.computeBaconNumber(actorId);
@@ -63,7 +62,6 @@ public class ActorServiceImp implements ActorService {
     public List<String> computeBaconPath(String actorId, String kevinBaconId) {
         return actorDAO.computeBaconPath(actorId, kevinBaconId);
     }
-
     @Override
     public double getAverageRating(String actorId) {
         return 0;
@@ -71,15 +69,11 @@ public class ActorServiceImp implements ActorService {
 	@Override
 	public List<Movie> getActorMoviesByBoxRevenue(String actorId) {
 		return actorDAO.getActorMoviesByBoxRevenue(actorId);
-		// TODO Auto-generated method stub
-		
 	}
-
     @Override
     public boolean updateActor(Actor actor) {
         return actorDAO.updateActor(actor);
     }
-
     @Override
     public List<Movie> getMoviesForActor(String actorId) {
         return movieDAO.getMoviesForActor(actorId);

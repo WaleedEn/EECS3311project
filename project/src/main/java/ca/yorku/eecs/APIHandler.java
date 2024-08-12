@@ -48,23 +48,23 @@ public class APIHandler implements HttpHandler {
 				handleAddMovie(request);
 			} else if (path.startsWith("/api/v1/addRelationship") && method.equals("PUT")) {
 				handleAddRelationship(request);
-			} else if (path.startsWith("/api/v1/getActor") && method.equals("GET")) {
+			} else if (path.equals("/api/v1/getActor") && method.equals("GET")) {
 				handleGetActor(request);
 			} else if (path.startsWith("/api/v1/getMovie") && method.equals("GET")) {
 				handleGetMovie(request);
 			} else if (path.startsWith("/api/v1/hasRelationship") && method.equals("GET")) {
 				handleHasRelationship(request);
-			} else if (path.startsWith("/api/v1/computeBaconNumber") && method.equals("GET")) {
+			} else if (path.equals("/api/v1/computeBaconNumber") && method.equals("GET")) {
 				handleComputeBaconNumber(request);
-			} else if (path.startsWith("/api/v1/computeBaconPath") && method.equals("GET")) {
+			} else if (path.equals("/api/v1/computeBaconPath") && method.equals("GET")) {
 				handleComputeBaconPath(request);
 			} else if (path.equals("/api/v1/addMovieRating") && method.equals("PUT")) {
 				handleAddMovieRating(request);
 			} else if (path.startsWith("/api/v1/getAverageRating") && method.equals("GET")) {
 				handleGetAverageRating(request);
-			} else if (path.startsWith("/api/v1/addMovieBoxRevenue") && method.equals("PUT")) {
+			} else if (path.equals("/api/v1/addMovieBoxRevenue") && method.equals("PUT")) {
 				handleAddMovieBoxRevenue(request);
-			} else if (path.startsWith("/api/v1/getActorMoviesByBoxRevenue") && method.equals("GET")) {
+			} else if (path.equals("/api/v1/getActorMoviesByBoxRevenue") && method.equals("GET")) {
 				handleGetActorMoviesByBoxRevenue(request);
 			} else {
 				this.sendResponse(request, 404, "Not Found");
@@ -77,11 +77,11 @@ public class APIHandler implements HttpHandler {
 		}
 	}
 
-	private void handleAddActor(HttpExchange exchange) throws IOException, JSONException {
-		if("PUT".equals(exchange.getRequestMethod())) {
+	private void handleAddActor(HttpExchange request) throws IOException, JSONException {
+		if("PUT".equals(request.getRequestMethod())) {
 
 			//starting the stream
-			InputStreamReader i_SR = new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
+			InputStreamReader i_SR = new InputStreamReader(request.getRequestBody(), StandardCharsets.UTF_8);
 
 			BufferedReader bfr = new BufferedReader(i_SR);
 
@@ -92,11 +92,7 @@ public class APIHandler implements HttpHandler {
 				sb.append(line);
 			}
 
-			//------------------------------------------------------------------------------
-
 			String requested_body = sb.toString();
-
-			//----------------------------------------------------------------------
 
 			try {
 				//parsing the json
@@ -117,28 +113,13 @@ public class APIHandler implements HttpHandler {
 				{response_generator = "Failed to add the actor to the database";}
 
 
-				exchange.sendResponseHeaders(checker ? 200 : 400, response_generator.getBytes().length);
-
-				//closing the stream
-				OutputStream OUT_Stream = exchange.getResponseBody();
-				OUT_Stream.write(response_generator.getBytes());
-				OUT_Stream.close(); 
-
-
+				sendResponse(request,checker ? 200 : 400, response_generator);
 
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-				exchange.sendResponseHeaders(400, -1);// BAD REQUEST SECTION
+				request.sendResponseHeaders(400, -1);
 			}
-
-
-
-		}
-		else {
-
-			exchange.sendResponseHeaders(405, -1); //error for when the method constraint is not allowed 
-
 		}
 
 	}
@@ -191,6 +172,9 @@ public class APIHandler implements HttpHandler {
 				movie.addActor(actorId);
 				movieController.updateMovie(movie);
 			}
+			else{
+				sendResponse(request, 404, "Actor or movie not found");
+			}
 
 			this.sendResponse(request, 200, "Relationship [ACTED IN] added Successfully");
 		} else {
@@ -198,30 +182,28 @@ public class APIHandler implements HttpHandler {
 		}
 	}
 
-	private void handleGetActor(HttpExchange exchange) throws IOException, JSONException {
+	private void handleGetActor(HttpExchange request) throws IOException, JSONException {
 
-		String query = exchange.getRequestURI().getQuery();
+		String query = request.getRequestURI().getQuery();
 		String actorId = Utils.getQueryParameter(query, "actorId");
 
 
 		if(actorId == null) {
-			sendResponse(exchange, 400, "Missing Actor Id");
+			sendResponse(request, 400, "Missing Actor Id");
 		}
 
 		Actor actorobj = actorController.getActor(actorId);
 
 		if(actorobj!=null) {
-			JSONObject jr = new JSONObject();
-
-			jr.put("actorId", actorobj.getActorId());
-			jr.put("name", actorobj.getName());
-			jr.put("movies", new JSONArray(actorobj.getMovies()));
-
-			String rr = jr.toString();
-			sendResponse(exchange, 200, rr);
+			String response = "{"
+					+ "\"actorId\": \"" + actorobj.getActorId() + "\", "
+					+ "\"name\": \"" + actorobj.getName() + "\", "
+					+ "\"movies\": " + new JSONArray(actorobj.getMovies()).toString()
+					+ "}";
+			sendResponse(request, 200, response);
 		}
 		else {
-			sendResponse(exchange, 404, "Actor not found");
+			sendResponse(request, 404, "Actor not found");
 		}
 
 	}
@@ -236,16 +218,13 @@ public class APIHandler implements HttpHandler {
 		}
 
 		Movie movieOBJ = movieController.getMovie(movieId);
-		if(movieOBJ!=null){
-
-			JSONObject jr = new JSONObject();
-
-			jr.put("movieId", movieOBJ.getMovieId());
-			jr.put("name", movieOBJ.getName());
-			jr.put("actors", new JSONArray(movieOBJ.getActors()));
-
-			String rr = jr.toString();
-			sendResponse(request, 200, rr);
+		if(movieOBJ!=null) {
+			String response = "{"
+					+ "\"movieId\": \"" + movieOBJ.getMovieId() + "\", "
+					+ "\"name\": \"" + movieOBJ.getName() + "\", "
+					+ "\"actors\": " + new JSONArray(movieOBJ.getActors()).toString()
+					+ "}";
+			sendResponse(request, 200, response);
 		}
 		else {
 			sendResponse(request, 404, "Movie not found");
@@ -393,6 +372,7 @@ public class APIHandler implements HttpHandler {
 		String actorId = Utils.getQueryParameter(query, "actorId");
 
 
+		// Check if request is valid
 		if(actorId == null || actorId.isEmpty()){
 			sendResponse(request, 400, "Missing actorId");
 			return;
@@ -411,6 +391,7 @@ public class APIHandler implements HttpHandler {
 				return;
 			}
 
+			//Calculate average rating
 			double totalRating = 0;
 			int count = 0;
 			for(Movie movie : movies){
@@ -442,96 +423,58 @@ public class APIHandler implements HttpHandler {
 		while ((line = reader.readLine()) != null) {
 			requestBody.append(line);
 		}
-
 		reader.close();
 
-		// request body turned into JSON object: 
+		// request body turned into JSON object
 		JSONObject json = new JSONObject(requestBody.toString());
 		String movieId = json.getString("movieId");
 		double revenue = json.getDouble("revenue");
 
-
-
+		// checking if movie exists
 		Movie movie = movieController.getMovie(movieId);
 		if (movie == null) {
 			sendResponse(request, 404, "Movie not found");
 			return;
 		}
 
-		// MovieController being called
+		// MovieController being called to add box revenue property to movie
 		boolean success = movieController.addMovieBoxRevenue(movieId, revenue);
 
-		// send response to client
+		// Send response to client
 		this.sendResponse(request, success ? 200 : 400, success ? "Successfully added movie box revenue "  : "Failed to add movie box revenue");
 	}
-	private void handleGetActorMoviesByBoxRevenue(HttpExchange exchange) throws IOException {
+	private void handleGetActorMoviesByBoxRevenue(HttpExchange request) throws IOException {
 
-		String actorId = null;
-		String neo_query_line = exchange.getRequestURI().getQuery();
+		String query = request.getRequestURI().getQuery();
+		String actorId = Utils.getQueryParameter(query, "actorId");
 
-		if(neo_query_line!=null) {
-			String [] splitted = neo_query_line.split("&");
-			for(String smaller :splitted ) {
-				String[] final_state = smaller.split("=");
-
-				if(final_state.length==2 && final_state[0].equals("actorId")) {
-					actorId = final_state[1];
-					break;
-				}
-			}
+		if (actorId == null || actorId.isEmpty()) {
+			sendResponse(request, 400, "actorId Missing or Invalid");
+			return;
 		}
-
-		if(actorId == null) {
-			exchange.sendResponseHeaders(400, -1);
-			return; 
-		}
-
 
 		try {
-			List<Movie> mvs = actorController.getActorMoviesByBoxRevenue(actorId);
+			List<Movie> movies = actorController.getActorMoviesByBoxRevenue(actorId);
 
-			if(mvs.isEmpty()==false) {
-				//coverting movie array to JSON array
-				JSONArray jsonMVS = new JSONArray();
-
-				for (Movie m: mvs) {
-
-					JSONObject jsonMV = new JSONObject();
-
-					jsonMV.put("actorId", m.getMovieId());
-					jsonMV.put("name", m.getName());
-					jsonMV.put("movies", m.getRevenue());
-
-					jsonMVS.put(jsonMV);
-				}
-
-				String response_container = jsonMVS.toString();
-
-				exchange.sendResponseHeaders(200, response_container.length());
-
-
-				try(OutputStream OUT_stream = exchange.getResponseBody()){
-					OUT_stream.write(response_container.getBytes(StandardCharsets.UTF_8));
-				}
-
-
-
-
-			}
-			else {
-				exchange.sendResponseHeaders(404, -1);//whne no movies found 
+			if (movies.isEmpty()) {
+				sendResponse(request, 404, "No movies found for actor");
+				return;
 			}
 
-
-		}
-		catch(Exception e) {
+			JSONArray jsonResponse = new JSONArray();
+			for (Movie movie : movies) {
+				JSONObject jsonMovie = new JSONObject();
+				jsonMovie.put("movieId", movie.getMovieId());
+				jsonMovie.put("name", movie.getName());
+				jsonMovie.put("revenue", movie.getRevenue());
+				jsonResponse.put(jsonMovie);
+			}
+			String response = jsonResponse.toString();
+			sendResponse(request, 200, response);
+		} catch (Exception e) {
 			e.printStackTrace();
-			exchange.sendResponseHeaders(500, -1);//Internal Server errror
+			sendResponse(request, 500, "Internal Server Error");
 		}
-
-
-
-
 	}
 
 	public void sendResponse(HttpExchange request, int statusCode, String response) throws IOException {

@@ -209,42 +209,41 @@ public class ActorDAOImp implements ActorDAO {
     }
 
     public List<Movie> getActorMoviesByBoxRevenue(String actorId){
-		List<Movie> movie_list = new ArrayList<>();
+        List<Movie> movie_list = new ArrayList<>();
 
-		String neo_line = "MATCH (a: Actor {actorId: $actorId})-[:ACTED_IN]->(m:Movie) " + "RETURN m.movieId AS movieId, m.name AS name, m.revenue AS revenue " + "ORDER BY m.revenue ASC" ;
-
-		try (Session session = driver.session()){
-
-			StatementResult neo_RESULT = session.run(neo_line, Values.parameters("actorId",actorId)); 
-
-			
-			while (neo_RESULT.hasNext()){
-				Record recorder = neo_RESULT.next(); 
-				String mvd = recorder.get("movieId").asString();
-				String nme = recorder.get("name").asString();
-				int rev = recorder.get("revenue").asInt();
-				
-				
-				Movie mv = new Movie(mvd, nme, rev, 0);
-				
-				
-				movie_list.add(mv);
-				
-
-			}
-
-			
+        String neo_line = "MATCH (a:Actor {id: $actorId}) " +
+                "WITH a.movies AS movieIds " +
+                "UNWIND movieIds AS movieId " +
+                "MATCH (m:Movie {id: movieId}) " +
+                "RETURN m.id AS movieId, m.name AS name, m.revenue AS revenue " +
+                "ORDER BY m.revenue ASC";
 
 
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			
-		}
+        try (Session session = driver.session()){
+
+            StatementResult neo_RESULT = session.run(neo_line, Values.parameters("actorId",actorId));
 
 
-		return movie_list; 
-	}
+            while (neo_RESULT.hasNext()){
+                Record recorder = neo_RESULT.next();
+                String mvd = recorder.get("movieId").asString();
+                String nme = recorder.get("name").asString();
+                int rev = recorder.get("revenue").asInt();
+
+
+                Movie mv = new Movie(mvd, nme, rev, rev);
+                movie_list.add(mv);
+
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+
+        }
+
+
+        return movie_list;
+    }
 
     @Override
     public boolean updateActor(Actor actor){
