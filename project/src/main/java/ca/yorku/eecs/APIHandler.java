@@ -254,6 +254,27 @@ public class APIHandler implements HttpHandler {
 	}
 
 	private void handleHasRelationship(HttpExchange request) throws IOException{
+
+		String query = request.getRequestURI().getQuery();
+    	String actorId = Utils.getQueryParameter(query, "actorId");
+    	String movieId = Utils.getQueryParameter(query, "movieId");
+
+    	if (actorId == null || actorId.isEmpty() || movieId == null || movieId.isEmpty()) {
+
+        	sendResponse(request, 400, "Missing actorId or movieId");
+        	return;
+    	}
+
+    	boolean hasRelationship = actorController.hasRelationship(actorId, movieId);
+
+    	if (hasRelationship) {
+
+        	sendResponse(request, 200, "Relationship exists between actor and movie");
+			
+    	} else {
+
+        	sendResponse(request, 404, "No relationship exists between actor and movie");
+    	}
 	}
 
 	private void handleComputeBaconNumber(HttpExchange request) throws IOException {

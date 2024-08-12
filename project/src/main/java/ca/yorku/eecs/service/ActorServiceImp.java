@@ -49,9 +49,10 @@ public class ActorServiceImp implements ActorService {
     }
 
     @Override
-    public String hasRelationship(String actorId, String movieId) {
-        return null;
+    public boolean hasRelationship(String actorId, String movieId) {
+        return actorDAO.hasRelationship(actorId, movieId);
     }
+
 
     @Override
     public String computeBaconNumber(String actorId) {

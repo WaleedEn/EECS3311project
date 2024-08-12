@@ -149,8 +149,21 @@ public class ActorDAOImp implements ActorDAO {
 
 
     @Override
-    public boolean HasRelationship(String actorId, String movieId) {
-        return false;
+    public boolean hasRelationship(String actorId, String movieId) {
+
+        try (Session session = driver.session()) {
+
+            //check for relationship 
+            String query = "MATCH (a:Actor {id: $actorId})-[:ACTED_IN]->(m:Movie {id: $movieId}) RETURN a, m";
+            StatementResult result = session.run(query, Values.parameters("actorId", actorId, "movieId", movieId));
+    
+            return result.hasNext();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
