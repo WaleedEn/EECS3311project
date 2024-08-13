@@ -2,51 +2,58 @@ package ca.yorku.eecs;
 
 import junit.framework.TestCase;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class AppTest extends TestCase {
-    private static final String BASE_URL = "http://localhost:8080"; // Update with your server's base URL
+    private static final String serverURL = "http://localhost:8080";
 
+    private HttpURLConnection sendRequest(String endpoint, String method) throws IOException{
+        URL url = new URL(serverURL + endpoint);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod(method);
+        return connection;
+    }
     public void testAddActorPass() throws Exception {
-        URL url = new URL(BASE_URL + "/api/v1/addActor?actorId=testActorId&name=Test Actor");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
+        HttpURLConnection connection = sendRequest("/api/v1/addActor", "PUT");
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.getOutputStream().write("{\"name\": \"ActorName\", \"actorId\": \"actor12345\"}".getBytes());
 
-        int responseCode = conn.getResponseCode();
-        System.out.println("Response Code: " + responseCode);
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        String inputLine;
-        while ((inputLine = in.readLine()) != null) {
-            System.out.println(inputLine);
-        }
-        in.close();
-
-        assertEquals(200, responseCode);
+        int statusCode = connection.getResponseCode();
+        assertEquals(200, statusCode);
+        connection.disconnect();
     }
 
     public void testAddActorFail() throws Exception {
-        URL url = new URL(BASE_URL + "/api/v1/addActor?name=Test Actor"); // Missing actorId
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
+        HttpURLConnection connection = sendRequest("/api/v1/addActor", "PUT");
+        connection.setDoOutput(true);
+        connection.getOutputStream().write("{\"actorId\": \"\", \"name\": \"\"}".getBytes());
 
-        int responseCode = conn.getResponseCode();
+        int responseCode = connection.getResponseCode();
         assertEquals(400, responseCode);
+        connection.disconnect();
     }
 
     public void testAddMoviePass() throws Exception {
-        URL url = new URL(BASE_URL + "/api/v1/addMovie?movieId=testMovieId&name=Test Movie");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
+        HttpURLConnection connection = sendRequest("/api/v1/addMovie", "PUT");
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Content-Type", "application/json");
 
-        int responseCode = conn.getResponseCode();
-        assertEquals(200, responseCode);
+        String requestBody = "{\"movieId\": \"movie123\", \"name\": \"MovieTitle\"}";
+        connection.getOutputStream().write(requestBody.getBytes());
+
+        int statusCode = connection.getResponseCode();
+        assertEquals(200, statusCode);
+        connection.disconnect();
     }
 
     public void testAddMovieFail() throws Exception {
-        URL url = new URL(BASE_URL + "/api/v1/addMovie?name=Test Movie"); // Missing movieId
+        URL url = new URL(serverURL + "/api/v1/addMovie?name=Test Movie"); // Missing movieId
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
 
@@ -55,7 +62,7 @@ public class AppTest extends TestCase {
     }
 
     public void testGetActorPass() throws Exception {
-        URL url = new URL(BASE_URL + "/api/v1/getActor?actorId=testActorId");
+        URL url = new URL(serverURL + "/api/v1/getActor?actorId=actor12345");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
 
@@ -64,7 +71,7 @@ public class AppTest extends TestCase {
     }
 
     public void testGetActorFail() throws Exception {
-        URL url = new URL(BASE_URL + "/api/v1/getActor?actorId=nonExistentActorId");
+        URL url = new URL(serverURL + "/api/v1/getActor?actorId=nonExistentActorId");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
 
@@ -73,7 +80,7 @@ public class AppTest extends TestCase {
     }
 
     public void testComputeBaconNumberPass() throws Exception {
-        URL url = new URL(BASE_URL + "/api/v1/computeBaconNumber?actorId=testActorId");
+        URL url = new URL(serverURL + "/api/v1/computeBaconNumber?actorId=actor12345");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
 
@@ -82,14 +89,13 @@ public class AppTest extends TestCase {
     }
 
     public void testComputeBaconNumberFail() throws Exception {
-        URL url = new URL(BASE_URL + "/api/v1/computeBaconNumber?actorId=nonExistentActorId");
+        URL url = new URL(serverURL + "/api/v1/computeBaconNumber?actorId=nonExistentActorId");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
 
         int responseCode = conn.getResponseCode();
         assertEquals(404, responseCode);
     }
-
-    // Add similar methods for other endpoints...
+    
 
 }

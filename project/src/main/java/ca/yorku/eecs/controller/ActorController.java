@@ -15,60 +15,62 @@ Example role: When you come to the library with a request, like "I want to add a
  */
 
 import ca.yorku.eecs.Neo4jConfig;
+import ca.yorku.eecs.dao.ActorDAO;
+import ca.yorku.eecs.dao.ActorDAOImp;
+import ca.yorku.eecs.dao.MovieDAO;
+import ca.yorku.eecs.dao.MovieDAOImp;
 import ca.yorku.eecs.model.Actor;
 import ca.yorku.eecs.model.Movie;
-import ca.yorku.eecs.service.ActorService;
-import ca.yorku.eecs.service.ActorServiceImp;
 import org.neo4j.driver.v1.Driver;
 
 import java.util.List;
 
 public class ActorController {
 
-    private final ActorService actorService;
+    private final ActorDAO actorDAO;
+    private final MovieDAO movieDAO;
 
     public ActorController(Driver driver){
-        this.actorService = new ActorServiceImp(driver);
+        this.actorDAO = new ActorDAOImp(driver);
+        this.movieDAO = new MovieDAOImp(driver);
     }
 
 	public boolean addActor(String actorId, String name) {
-		return actorService.addActor(actorId, name);
-		
+        return actorDAO.addActor(actorId,name);
 	}
 
     public Actor getActor(String actorId){
-        return actorService.getActor(actorId);
+        return actorDAO.getActor(actorId);
     }
 
     public boolean addRelationship(String actorId, String movieId){
-        return actorService.addRelationship(actorId, movieId);
+        return actorDAO.addRelationship(actorId, movieId);
     }
 
     public boolean hasRelationship(String actorId, String movieId){
-        return actorService.hasRelationship(actorId, movieId);
+        return actorDAO.hasRelationship(actorId, movieId);
     }
 
     public int computeBaconNumber(String actorId){
-        return actorService.computeBaconNumber(actorId);
+        return actorDAO.computeBaconNumber(actorId);
     }
 
-    public List<String> computeBaconPath(String actorId, String kevinBaconId){
-        return actorService.computeBaconPath(actorId, kevinBaconId);
+    public List<String> computeBaconPath(String actorId){
+        return actorDAO.computeBaconPath(actorId);
     }
 
-    public String getAverageRating(String actorId){
-        return null;
+    public double getAverageRating(String actorId){
+        return actorDAO.getAverageRating(actorId);
     }
 
     public List<Movie> getActorMoviesByBoxRevenue(String actorId){
-    	// TODO Auto-generated method stub
-    	return actorService.getActorMoviesByBoxRevenue(actorId);
+    	return actorDAO.getActorMoviesByBoxRevenue(actorId);
     }
     public boolean updateActor(Actor actor) {
-        return actorService.updateActor(actor);
+        return actorDAO.updateActor(actor);
     }
 
     public List<Movie> getMoviesForActor(String actorId){
-        return actorService.getMoviesForActor(actorId);
+        return movieDAO.getMoviesForActor(actorId);
     }
 }

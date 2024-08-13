@@ -10,6 +10,7 @@ import org.neo4j.driver.v1.types.Path;
 
 import static org.neo4j.driver.v1.Values.parameters;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -190,22 +191,39 @@ public class ActorDAOImp implements ActorDAO {
     }
 
     @Override
-    public List<String> computeBaconPath(String actorId, String kevinBaconId) {
+    public List<String> computeBaconPath(String actorId) {
+
         final String KEVINBACON_ID = "nm0000102";
+
         try (Session session = driver.session()) {
+            // Cypher query to get the shortest path between the actor and Kevin Bacon
             String query = "MATCH p=shortestPath((a:Actor {actorId: $actorId})-[*]-(b:Actor {actorId: $kevinBaconId})) " +
                     "UNWIND nodes(p) AS node " +
-                    "RETURN node";
+                    "RETURN node.actorId AS actorId, node.movieId AS movieId " +
+                    "ORDER BY ID(node)";
 
             StatementResult result = session.run(query, Values.parameters("actorId", actorId, "kevinBaconId", KEVINBACON_ID));
 
-            if (result.hasNext()) {
-                Record record = result.next();
-                List<String> path = new ArrayList<>();
+            List<String> baconPath = new ArrayList<>();
+            for (Record record : result.list()) {
+                if (record.containsKey("actorId") && record.get("actorId").asString() != null) {
+                    baconPath.add(record.get("actorId").asString());
+                }
+                if (record.containsKey("movieId") && record.get("movieId").asString() != null) {
+                    baconPath.add(record.get("movieId").asString());
+                }
             }
-        }
 
-        return new ArrayList<>(); //UNFINISHED
+            // Ensure Kevin Bacon is included at the end
+            if (!baconPath.contains(KEVINBACON_ID)) {
+                baconPath.add(KEVINBACON_ID);
+            }
+
+            return baconPath;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public List<Movie> getActorMoviesByBoxRevenue(String actorId){
@@ -246,6 +264,10 @@ public class ActorDAOImp implements ActorDAO {
     }
 
     @Override
+    public double getAverageRating(String actorId) {
+        return 0;
+    }
+    @Override
     public boolean updateActor(Actor actor){
         try(Session session = driver.session()){
             String query = "MATCH (a:Actor {id: $actorId}) SET a.movies = $movies";
@@ -257,5 +279,6 @@ public class ActorDAOImp implements ActorDAO {
             return false;
         }
     }
+
 
 }
