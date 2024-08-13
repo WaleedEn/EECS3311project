@@ -96,6 +96,4 @@ public class AppTest extends TestCase {
         int responseCode = conn.getResponseCode();
         assertEquals(404, responseCode);
     }
-    
-
 }

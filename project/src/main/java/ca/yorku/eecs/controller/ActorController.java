@@ -59,10 +59,6 @@ public class ActorController {
         return actorDAO.computeBaconPath(actorId);
     }
 
-    public double getAverageRating(String actorId){
-        return actorDAO.getAverageRating(actorId);
-    }
-
     public List<Movie> getActorMoviesByBoxRevenue(String actorId){
     	return actorDAO.getActorMoviesByBoxRevenue(actorId);
     }

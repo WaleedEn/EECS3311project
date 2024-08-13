@@ -196,31 +196,34 @@ public class ActorDAOImp implements ActorDAO {
         final String KEVINBACON_ID = "nm0000102";
 
         try (Session session = driver.session()) {
-            // Cypher query to get the shortest path between the actor and Kevin Bacon
-            String query = "MATCH p=shortestPath((a:Actor {actorId: $actorId})-[*]-(b:Actor {actorId: $kevinBaconId})) " +
-                    "UNWIND nodes(p) AS node " +
-                    "RETURN node.actorId AS actorId, node.movieId AS movieId " +
-                    "ORDER BY ID(node)";
+            // cypher query to get the shortest path between the actor and Kevin Bacon
+            String query = "MATCH p=shortestPath((a:Actor {id: $actorId})-[*]-(b:Actor {id: $kevinBaconId})) " +
+                    "RETURN [node IN nodes(p) | " +
+                    "  CASE " +
+                    "    WHEN 'Actor' IN labels(node) THEN node.id " +
+                    "    WHEN 'Movie' IN labels(node) THEN node.id " +
+                    "    ELSE 'Unknown' " +
+                    "  END] AS idList";
 
             StatementResult result = session.run(query, Values.parameters("actorId", actorId, "kevinBaconId", KEVINBACON_ID));
 
             List<String> baconPath = new ArrayList<>();
-            for (Record record : result.list()) {
-                if (record.containsKey("actorId") && record.get("actorId").asString() != null) {
-                    baconPath.add(record.get("actorId").asString());
+            if(result.hasNext()){
+                Record record = result.next();
+                List<Object> idList = record.get("idList").asList();
+                for(Object id : idList){
+                    if(id!=null) baconPath.add(id.toString());
                 }
-                if (record.containsKey("movieId") && record.get("movieId").asString() != null) {
-                    baconPath.add(record.get("movieId").asString());
-                }
+            } else{
+                return new ArrayList<>();
             }
 
-            // Ensure Kevin Bacon is included at the end
             if (!baconPath.contains(KEVINBACON_ID)) {
                 baconPath.add(KEVINBACON_ID);
             }
-
             return baconPath;
-        } catch (Exception e) {
+
+        } catch (Exception e){
             e.printStackTrace();
             return new ArrayList<>();
         }
@@ -236,11 +239,8 @@ public class ActorDAOImp implements ActorDAO {
                 "RETURN m.id AS movieId, m.name AS name, m.revenue AS revenue " +
                 "ORDER BY m.revenue ASC";
 
-
         try (Session session = driver.session()){
-
             StatementResult neo_RESULT = session.run(neo_line, Values.parameters("actorId",actorId));
-
 
             while (neo_RESULT.hasNext()){
                 Record recorder = neo_RESULT.next();
@@ -248,24 +248,14 @@ public class ActorDAOImp implements ActorDAO {
                 String nme = recorder.get("name").asString();
                 int rev = recorder.get("revenue").asInt();
 
-
                 Movie mv = new Movie(mvd, nme, rev, rev);
                 movie_list.add(mv);
-
             }
         }
         catch(Exception e) {
             e.printStackTrace();
-
         }
-
-
         return movie_list;
-    }
-
-    @Override
-    public double getAverageRating(String actorId) {
-        return 0;
     }
     @Override
     public boolean updateActor(Actor actor){
@@ -280,5 +270,10 @@ public class ActorDAOImp implements ActorDAO {
         }
     }
 
-
+    public void deleteActor(String actorId){
+        try (Session session = driver.session()) {
+            String query =  "MATCH (a:Actor {actorId: $actorId}) DETACH DELETE a";
+            session.run(query, Values.parameters("actorId", actorId));
+        }
+    }
 }

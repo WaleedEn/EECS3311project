@@ -11,7 +11,7 @@ public interface MovieDAO {
     boolean addMovieRating(String movieId, double rating);
     boolean addMovieBoxOffice(String movieId, double boxRevenue);
     public boolean updateMovie(Movie movie);
-
     public List<Movie> getMoviesForActor(String actorId);
+    public void deleteMovie(String movieId);
 
 }

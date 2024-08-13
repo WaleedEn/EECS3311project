@@ -145,4 +145,11 @@ public boolean addMovieRating(String movieId, double rating) {
         }
         return movies;
     }
+
+    public void deleteMovie(String movieId) {
+        try (Session session = driver.session()) {
+            String query = "MATCH (m:Movie {movieId: $movieId}) DETACH DELETE m";
+            session.run(query, Values.parameters("movieId", movieId));
+        }
+    }
 }

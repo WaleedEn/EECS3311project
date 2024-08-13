@@ -440,7 +440,7 @@ public class APIHandler implements HttpHandler {
 			}
 
 			double averageRating = totalRating/count;
-			sendResponse(request, 200, "Average rating for Actor: " +actorId+ " is " +averageRating);
+			sendResponse(request, 200, "Average rating for Actor " +actorId+ " is " +averageRating);
 		} catch (Exception e){
 			e.printStackTrace();
 			sendResponse(request, 500, "Internal Sever Error");

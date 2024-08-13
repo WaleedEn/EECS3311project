@@ -25,8 +25,7 @@ public interface ActorDAO {
     List<String> computeBaconPath(String actorId);
 	
 	List<Movie> getActorMoviesByBoxRevenue(String actorId);
-
     public boolean updateActor(Actor actor);
-    public double getAverageRating(String actorId);
+    public void deleteActor(String actorId);
 
 }
