@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e8365453-8812-41d3-983d-0bde4b5f86ec" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/APIHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/APIHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/controller/ActorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/controller/ActorController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAOImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAOImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/test/java/ca/yorku/eecs/AppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/test/java/ca/yorku/eecs/AppTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="e8365453-8812-41d3-983d-0bde4b5f86ec" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

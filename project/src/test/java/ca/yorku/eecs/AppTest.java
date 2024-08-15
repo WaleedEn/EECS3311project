@@ -1,17 +1,12 @@
 package ca.yorku.eecs;
 
-import com.sun.deploy.net.HttpRequest;
-import com.sun.net.httpserver.HttpExchange;
+
 import com.sun.net.httpserver.HttpServer;
 import junit.framework.TestCase;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.neo4j.driver.v1.Driver;
 
-import java.awt.image.Kernel;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
