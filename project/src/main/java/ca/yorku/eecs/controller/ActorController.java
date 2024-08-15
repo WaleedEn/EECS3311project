@@ -69,4 +69,8 @@ public class ActorController {
     public List<Movie> getMoviesForActor(String actorId){
         return movieDAO.getMoviesForActor(actorId);
     }
+
+    public boolean deleteAll(){
+        return actorDAO.deleteAll();
+    }
 }

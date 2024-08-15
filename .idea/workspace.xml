@@ -10,8 +10,6 @@
       <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/controller/ActorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/controller/ActorController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAOImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAOImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/MovieDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/MovieDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/MovieDAOImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/MovieDAOImp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/src/test/java/ca/yorku/eecs/AppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/test/java/ca/yorku/eecs/AppTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -40,19 +38,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Lucas/Desktop/Repos/LearnSpringFramework/pom.xml&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
+    <configuration name="Run App" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="ca.yorku.eecs.App" />
+      <module name="project" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="EECS3311project" />
       <method v="2">

@@ -172,6 +172,8 @@ public class ActorDAOImp implements ActorDAO {
 
         final String KEVINBACON_ID = "nm0000102";
 
+        if(actorId.equals(KEVINBACON_ID)) return 0;
+
         try(Session session = driver.session()) {
             String query = "MATCH path = shortestPath((a:Actor {id: $actorId})-[:ACTED_IN*]-(b:Actor {id: $kevinBaconId})) " +
                     "RETURN length(path) AS baconNumber";
@@ -192,8 +194,14 @@ public class ActorDAOImp implements ActorDAO {
 
     @Override
     public List<String> computeBaconPath(String actorId) {
+        List<String> baconPath = new ArrayList<>();
 
         final String KEVINBACON_ID = "nm0000102";
+
+        if(actorId.equals(KEVINBACON_ID)){
+            baconPath.add(KEVINBACON_ID);
+            return baconPath;
+        }
 
         try (Session session = driver.session()) {
             // cypher query to get the shortest path between the actor and Kevin Bacon
@@ -207,7 +215,6 @@ public class ActorDAOImp implements ActorDAO {
 
             StatementResult result = session.run(query, Values.parameters("actorId", actorId, "kevinBaconId", KEVINBACON_ID));
 
-            List<String> baconPath = new ArrayList<>();
             if(result.hasNext()){
                 Record record = result.next();
                 List<Object> idList = record.get("idList").asList();
@@ -269,11 +276,14 @@ public class ActorDAOImp implements ActorDAO {
             return false;
         }
     }
-
-    public void deleteActor(String actorId){
-        try (Session session = driver.session()) {
-            String query =  "MATCH (a:Actor {actorId: $actorId}) DETACH DELETE a";
-            session.run(query, Values.parameters("actorId", actorId));
-        }
+    @Override
+    public boolean deleteAll(){
+        try(Session session = driver.session()){
+            session.run("MATCH (n) DETACH DELETE n");
+            return true;
+        } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
     }
 }
