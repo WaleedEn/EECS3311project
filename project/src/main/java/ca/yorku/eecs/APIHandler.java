@@ -34,7 +34,6 @@ public class APIHandler implements HttpHandler {
 	}
 	@Override
 	public void handle(HttpExchange request) throws IOException {
-		// TODO Auto-generated method stub
 		String method = request.getRequestMethod();
 		String path = request.getRequestURI().getPath();
 		OutputStream os = request.getResponseBody();
