@@ -47,7 +47,6 @@ public class Actor {
             movies.add(movieId);
         }
     }
-
     @Override
     public String toString() {
         return "Actor{" +

@@ -22,10 +22,10 @@ public interface ActorDAO {
     boolean addRelationship(String actorId, String movieId);
     boolean hasRelationship(String actorId, String movieId);
     int computeBaconNumber(String actorId);
-    List<String> computeBaconPath(String actorId, String kevinBaconId);
+    List<String> computeBaconPath(String actorId);
 	
 	List<Movie> getActorMoviesByBoxRevenue(String actorId);
-
     public boolean updateActor(Actor actor);
+    public boolean deleteAll();
 
 }

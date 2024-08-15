@@ -20,12 +20,29 @@ public class MovieDAOImp implements MovieDAO{
     }
     @Override
     public boolean addMovie(Movie movie) {
+
+        String checkMovieQuery = "MATCH (m:Movie {id: $id}) RETURN m";
+
+        String addMovieQuery = "MERGE (m:Movie {id: $id}) " +
+                "SET m.name = $name, " +
+                "    m.actors = COALESCE(m.actors, []) " +
+                "RETURN m";
+
+
         try (Session session = driver.session()) {
-            String query = "MERGE (m:Movie {id: $id}) " +
-                    "SET m.name = $name, " +
-                    "    m.actors = COALESCE(m.actors, [])";
-            session.run(query, Values.parameters("id", movie.getMovieId(), "name", movie.getName()));
-            return true;
+            Transaction tx = session.beginTransaction();
+
+            StatementResult checkResult = tx.run(checkMovieQuery, Values.parameters("id", movie.getMovieId(), "name", movie.getName()));
+
+
+            if(checkResult.hasNext()){
+                tx.success();
+                return false;
+            }
+
+            StatementResult addResult = tx.run(addMovieQuery, Values.parameters("id", movie.getMovieId(), "name", movie.getName()));
+            tx.success();
+            return addResult.hasNext();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -127,5 +144,12 @@ public boolean addMovieRating(String movieId, double rating) {
             }
         }
         return movies;
+    }
+
+    public void deleteMovie(String movieId) {
+        try (Session session = driver.session()) {
+            String query = "MATCH (m:Movie {movieId: $movieId}) DETACH DELETE m";
+            session.run(query, Values.parameters("movieId", movieId));
+        }
     }
 }

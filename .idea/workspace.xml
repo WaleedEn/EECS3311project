@@ -6,6 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="e8365453-8812-41d3-983d-0bde4b5f86ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/APIHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/APIHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/controller/ActorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/controller/ActorController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAOImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/main/java/ca/yorku/eecs/dao/ActorDAOImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project/src/test/java/ca/yorku/eecs/AppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/project/src/test/java/ca/yorku/eecs/AppTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,14 +40,25 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Lucas/Desktop/Repos/LearnSpringFramework/pom.xml&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
 }</component>
   <component name="RunManager">
+    <configuration name="Run App" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="ca.yorku.eecs.App" />
+      <module name="project" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="EECS3311project" />
       <method v="2">

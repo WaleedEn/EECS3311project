@@ -10,6 +10,7 @@ import org.neo4j.driver.v1.types.Path;
 
 import static org.neo4j.driver.v1.Values.parameters;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -171,6 +172,8 @@ public class ActorDAOImp implements ActorDAO {
 
         final String KEVINBACON_ID = "nm0000102";
 
+        if(actorId.equals(KEVINBACON_ID)) return 0;
+
         try(Session session = driver.session()) {
             String query = "MATCH path = shortestPath((a:Actor {id: $actorId})-[:ACTED_IN*]-(b:Actor {id: $kevinBaconId})) " +
                     "RETURN length(path) AS baconNumber";
@@ -190,62 +193,77 @@ public class ActorDAOImp implements ActorDAO {
     }
 
     @Override
-    public List<String> computeBaconPath(String actorId, String kevinBaconId) {
+    public List<String> computeBaconPath(String actorId) {
+        List<String> baconPath = new ArrayList<>();
+
         final String KEVINBACON_ID = "nm0000102";
+
+        if(actorId.equals(KEVINBACON_ID)){
+            baconPath.add(KEVINBACON_ID);
+            return baconPath;
+        }
+
         try (Session session = driver.session()) {
-            String query = "MATCH p=shortestPath((a:Actor {actorId: $actorId})-[*]-(b:Actor {actorId: $kevinBaconId})) " +
-                    "UNWIND nodes(p) AS node " +
-                    "RETURN node";
+            // cypher query to get the shortest path between the actor and Kevin Bacon
+            String query = "MATCH p=shortestPath((a:Actor {id: $actorId})-[*]-(b:Actor {id: $kevinBaconId})) " +
+                    "RETURN [node IN nodes(p) | " +
+                    "  CASE " +
+                    "    WHEN 'Actor' IN labels(node) THEN node.id " +
+                    "    WHEN 'Movie' IN labels(node) THEN node.id " +
+                    "    ELSE 'Unknown' " +
+                    "  END] AS idList";
 
             StatementResult result = session.run(query, Values.parameters("actorId", actorId, "kevinBaconId", KEVINBACON_ID));
 
-            if (result.hasNext()) {
+            if(result.hasNext()){
                 Record record = result.next();
-                List<String> path = new ArrayList<>();
+                List<Object> idList = record.get("idList").asList();
+                for(Object id : idList){
+                    if(id!=null) baconPath.add(id.toString());
+                }
+            } else{
+                return new ArrayList<>();
             }
-        }
 
-        return new ArrayList<>(); //UNFINISHED
+            if (!baconPath.contains(KEVINBACON_ID)) {
+                baconPath.add(KEVINBACON_ID);
+            }
+            return baconPath;
+
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public List<Movie> getActorMoviesByBoxRevenue(String actorId){
-		List<Movie> movie_list = new ArrayList<>();
+        List<Movie> movie_list = new ArrayList<>();
 
-		String neo_line = "MATCH (a: Actor {actorId: $actorId})-[:ACTED_IN]->(m:Movie) " + "RETURN m.movieId AS movieId, m.name AS name, m.revenue AS revenue " + "ORDER BY m.revenue ASC" ;
+        String neo_line = "MATCH (a:Actor {id: $actorId}) " +
+                "WITH a.movies AS movieIds " +
+                "UNWIND movieIds AS movieId " +
+                "MATCH (m:Movie {id: movieId}) " +
+                "RETURN m.id AS movieId, m.name AS name, m.revenue AS revenue " +
+                "ORDER BY m.revenue ASC";
 
-		try (Session session = driver.session()){
+        try (Session session = driver.session()){
+            StatementResult neo_RESULT = session.run(neo_line, Values.parameters("actorId",actorId));
 
-			StatementResult neo_RESULT = session.run(neo_line, Values.parameters("actorId",actorId)); 
+            while (neo_RESULT.hasNext()){
+                Record recorder = neo_RESULT.next();
+                String mvd = recorder.get("movieId").asString();
+                String nme = recorder.get("name").asString();
+                int rev = recorder.get("revenue").asInt();
 
-			
-			while (neo_RESULT.hasNext()){
-				Record recorder = neo_RESULT.next(); 
-				String mvd = recorder.get("movieId").asString();
-				String nme = recorder.get("name").asString();
-				int rev = recorder.get("revenue").asInt();
-				
-				
-				Movie mv = new Movie(mvd, nme, rev, 0);
-				
-				
-				movie_list.add(mv);
-				
-
-			}
-
-			
-
-
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			
-		}
-
-
-		return movie_list; 
-	}
-
+                Movie mv = new Movie(mvd, nme, rev, rev);
+                movie_list.add(mv);
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return movie_list;
+    }
     @Override
     public boolean updateActor(Actor actor){
         try(Session session = driver.session()){
@@ -258,5 +276,14 @@ public class ActorDAOImp implements ActorDAO {
             return false;
         }
     }
-
+    @Override
+    public boolean deleteAll(){
+        try(Session session = driver.session()){
+            session.run("MATCH (n) DETACH DELETE n");
+            return true;
+        } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
+    }
 }

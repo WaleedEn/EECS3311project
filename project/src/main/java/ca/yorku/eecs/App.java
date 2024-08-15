@@ -12,12 +12,10 @@ public class App
 
         HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", PORT), 0);
         
-        
-        //creating a single context for all API requests as mentioned in assignment 
-        
+        //Creating a single context for all API requests as mentioned in assignment
         server.createContext("/api/v1", new APIHandler(neo4jConfig));
-        
         server.start();
+
         System.out.printf("Server started on port %d...\n", PORT);
     }
 }
